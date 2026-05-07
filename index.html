@@ -1,1027 +1,835 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Form 1 English Paper 1 - Interactive Slide Deck</title>
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form 1 English - Paper 1 (Interactive Smartboard Deck)</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #111827; /* Dark background behind the slide */
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-:root {
-  --bg: #e2e8f0;
-  --slide-bg: #ffffff;
-  --card-bg: #f1f5f9;
-  --card-border: rgba(0,0,0,.06);
-  --text: #0f172a;
-  --text2: #64748b;
-  --accent: #0284c7;
-  --accent2: #4f46e5;
-  --green: #16a34a;
-  --red: #dc2626;
-  --amber: #d97706;
-  --pink: #db2777;
-  --radius: 12px;
-}
+        /* 16:9 Smartboard Container */
+        #smartboard-container {
+            width: 100%;
+            max-width: 1920px;
+            aspect-ratio: 16 / 9;
+            background-color: #f8fafc;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
-html, body { width: 100%; height: 100%; overflow: hidden; background: #cbd5e1; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: var(--text); }
+        /* Slide Transitions */
+        .slide {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            padding: 2rem 3rem;
+            animation: fadeIn 0.4s ease-in-out;
+            overflow-y: auto;
+        }
+        .slide.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-#wrapper {
-  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-}
+        /* Custom Scrollbar for overflow areas */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-#stage {
-  width: 100vw; height: 100vh; position: relative;
-  background: var(--slide-bg);
-  box-shadow: 0 4px 40px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.06);
-  overflow: hidden; display: flex; flex-direction: column;
-}
-
-.slide {
-  position: absolute; inset: 0; display: none; flex-direction: column;
-  padding: clamp(14px, 2.5vmin, 36px) clamp(18px, 3vmin, 42px) clamp(18px, 3vmin, 42px);
-  overflow-y: auto; overflow-x: hidden;
-}
-.slide.active { display: flex; }
-
-/* Navigation */
-#nav-left, #nav-right {
-  position: absolute; top: 50%; transform: translateY(-50%); z-index: 100;
-  width: clamp(28px, 3.5vmin, 48px); height: clamp(28px, 3.5vmin, 48px); border-radius: 50%; border: none;
-  background: rgba(0,0,0,.06); color: var(--text2); cursor: pointer;
-  font-size: clamp(13px, 1.6vmin, 22px); display: flex; align-items: center; justify-content: center;
-  transition: background .2s;
-}
-#nav-left:hover, #nav-right:hover { background: var(--accent); color: #fff; }
-#nav-left { left: 1vmin; }
-#nav-right { right: 1vmin; }
-
-/* Top bar */
-#topbar {
-  position: absolute; top: clamp(6px, .8vmin, 12px); right: clamp(12px, 1.5vmin, 22px); z-index: 100;
-  display: flex; align-items: center; gap: 1vmin;
-}
-#slide-num { font-size: clamp(11px, 1.2vmin, 18px); color: var(--text2); font-weight: 600; }
-#fs-btn {
-  background: var(--card-bg); border: 1px solid rgba(0,0,0,.1);
-  color: var(--text); padding: clamp(4px, .5vmin, 8px) clamp(7px, 1vmin, 15px); border-radius: 6px; cursor: pointer;
-  font-size: clamp(10px, 1.1vmin, 16px); transition: background .2s; display: flex; align-items: center; gap: .4vmin;
-}
-#fs-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* Footer */
-#footer {
-  position: absolute; bottom: clamp(6px, .8vmin, 12px); right: clamp(14px, 1.8vmin, 26px); z-index: 100;
-  font-size: clamp(10px, .95vmin, 14px); color: var(--text2); font-weight: 500;
-}
-
-/* Progress dots */
-#dots {
-  position: absolute; bottom: clamp(6px, .8vmin, 12px); left: 50%; transform: translateX(-50%);
-  z-index: 100; display: flex; gap: .6vmin;
-}
-.dot {
-  width: clamp(6px, .65vmin, 10px); height: clamp(6px, .65vmin, 10px); border-radius: 50%;
-  background: rgba(0,0,0,.12); cursor: pointer; transition: all .25s;
-}
-.dot.active { background: var(--accent); box-shadow: 0 0 4px rgba(2,132,199,.4); }
-
-/* Typography */
-h1 { font-size: clamp(22px, 3.8vmin, 58px); font-weight: 800; letter-spacing: -.02em; }
-h2 { font-size: clamp(17px, 2.4vmin, 36px); font-weight: 700; }
-h3 { font-size: clamp(14px, 1.8vmin, 28px); font-weight: 700; }
-h4 { font-size: clamp(13px, 1.4vmin, 22px); font-weight: 600; }
-p, li, td, th, span { font-size: clamp(13px, 1.25vmin, 21px); line-height: 1.55; }
-small { font-size: clamp(11px, 1vmin, 15px); }
-
-.part-badge {
-  display: inline-block; padding: clamp(4px, .4vmin, 7px) clamp(10px, 1.2vmin, 18px); border-radius: 20px;
-  font-weight: 700; font-size: clamp(10px, 1vmin, 15px); letter-spacing: .05em;
-  text-transform: uppercase; margin-bottom: 1vmin;
-}
-
-.instruction {
-  color: var(--text2); font-size: clamp(12px, 1.05vmin, 17px); font-style: italic; margin-bottom: 1.2vmin;
-}
-
-/* Card */
-.card {
-  background: var(--card-bg); border-radius: var(--radius); padding: clamp(10px, 1.5vmin, 22px);
-  border: 1px solid var(--card-border); display: flex; flex-direction: column;
-}
-
-/* Question number badge */
-.q-num {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: clamp(20px, 2.2vmin, 32px); height: clamp(20px, 2.2vmin, 32px); border-radius: 50%;
-  background: var(--accent); color: #fff; font-weight: 800;
-  font-size: clamp(11px, 1.1vmin, 16px); flex-shrink: 0;
-}
-
-/* Options */
-.options { display: flex; flex-direction: column; gap: .5vmin; margin-top: .8vmin; flex: 1; }
-.option {
-  display: flex; align-items: center; gap: .8vmin; padding: clamp(6px, .7vmin, 11px) clamp(8px, 1vmin, 15px);
-  border-radius: 8px; border: 2px solid rgba(0,0,0,.1); cursor: pointer;
-  transition: all .2s; background: #fff;
-  font-size: clamp(12px, 1.2vmin, 19px);
-}
-.option:hover { border-color: var(--accent); background: #e0f2fe; }
-.option.selected { border-color: var(--accent); background: #e0f2fe; }
-.option.correct { border-color: var(--green); background: #dcfce7; }
-.option.wrong { border-color: var(--red); background: #fee2e2; }
-.option-letter {
-  width: clamp(18px, 2vmin, 28px); height: clamp(18px, 2vmin, 28px); border-radius: 50%; display: flex;
-  align-items: center; justify-content: center; font-weight: 700;
-  font-size: clamp(10px, 1vmin, 15px); background: rgba(0,0,0,.06); flex-shrink: 0; color: var(--text);
-}
-.option.selected .option-letter { background: var(--accent); color: #fff; }
-.option.correct .option-letter { background: var(--green); color: #fff; }
-.option.wrong .option-letter { background: var(--red); color: #fff; }
-
-/* Reveal button */
-.reveal-btn {
-  margin-top: .8vmin; padding: clamp(5px, .5vmin, 9px) clamp(10px, 1.2vmin, 18px); border-radius: 6px;
-  border: 1px solid var(--accent); background: transparent; color: var(--accent);
-  cursor: pointer; font-size: clamp(11px, 1vmin, 15px); font-weight: 600; transition: all .2s;
-}
-.reveal-btn:hover { background: var(--accent); color: #fff; }
-.reveal-btn.shown { background: var(--green); border-color: var(--green); color: #fff; }
-
-/* Grid */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vmin; }
-.grid-60-40 { display: grid; grid-template-columns: 3fr 2fr; gap: 1.5vmin; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2vmin; }
-.grid-2 > *, .grid-60-40 > *, .grid-3 > * { min-height: 0; }
-
-/* Editable */
-[contenteditable="true"] {
-  outline: none; border-bottom: 2px dashed var(--accent); padding: .1vmin .3vmin;
-  min-width: 4vmin; display: inline-block; transition: border-color .2s;
-}
-[contenteditable="true"]:focus { border-bottom-color: var(--accent2); background: #fefce8; }
-
-.editable-field {
-  background: #fefce8; border: 1px dashed rgba(0,0,0,.15);
-  border-radius: 6px; padding: clamp(4px, .5vmin, 8px) clamp(6px, .8vmin, 12px); min-width: 10vmin;
-  display: inline-block; outline: none; font-size: clamp(12px, 1.15vmin, 18px); color: var(--text);
-}
-.editable-field:focus { border-color: var(--accent); background: #e0f2fe; }
-
-/* Dialogue */
-.dialogue {
-  display: flex; flex-direction: column; gap: .6vmin;
-}
-.msg {
-  max-width: 70%; padding: clamp(6px, .8vmin, 13px) clamp(8px, 1.2vmin, 18px); border-radius: 12px;
-  font-size: clamp(12px, 1.2vmin, 19px);
-}
-.msg.left { align-self: flex-start; background: #e2e8f0; border-bottom-left-radius: 3px; color: var(--text); }
-.msg.right { align-self: flex-end; background: #e0f2fe; border-bottom-right-radius: 3px; color: var(--text); }
-.msg-name { font-weight: 700; font-size: clamp(9px, .85vmin, 13px); margin-bottom: .2vmin; color: var(--accent); }
-
-/* Tables */
-table { width: 100%; border-collapse: collapse; font-size: clamp(11px, 1.1vmin, 17px); }
-th, td { padding: clamp(5px, .7vmin, 11px) clamp(7px, 1vmin, 15px); text-align: left; border-bottom: 1px solid rgba(0,0,0,.08); }
-th { background: #e0f2fe; font-weight: 700; font-size: clamp(10px, 1.05vmin, 16px); color: #0369a1; }
-td { font-size: clamp(11px, 1.1vmin, 17px); }
-td .editable-field { min-width: 12vmin; display: block; }
-
-/* Gap fill */
-.gap-slot {
-  display: inline-block; min-width: 4vmin; padding: .15vmin .5vmin;
-  border-bottom: 2px solid var(--amber); margin: 0 .2vmin; text-align: center;
-  font-weight: 600; color: var(--amber); font-size: clamp(12px, 1.15vmin, 18px); cursor: pointer;
-  transition: all .2s;
-}
-.gap-slot.filled { border-bottom-color: var(--green); color: var(--green); }
-.gap-slot.active { background: #fef3c7; }
-
-.sentence-bank {
-  display: flex; flex-wrap: wrap; gap: .6vmin; margin-top: 1.2vmin;
-}
-.sentence-chip {
-  padding: clamp(4px, .5vmin, 8px) clamp(7px, 1vmin, 15px); border-radius: 6px; background: #fff;
-  border: 1px solid rgba(0,0,0,.12); cursor: pointer;
-  font-size: clamp(10px, 1vmin, 15px); transition: all .2s; color: var(--text);
-}
-.sentence-chip:hover { border-color: var(--amber); background: #fffbeb; }
-.sentence-chip.selected { border-color: var(--amber); background: #fef3c7; color: var(--amber); }
-.sentence-chip.used { opacity: .3; pointer-events: none; }
-
-/* Tag */
-.tag {
-  display: inline-flex; align-items: center; gap: .3vmin; padding: .25vmin .7vmin;
-  border-radius: 4px; font-size: clamp(10px, .9vmin, 14px); font-weight: 600;
-}
-.tag.t { background: #dcfce7; color: #15803d; }
-.tag.f { background: #fee2e2; color: #b91c1c; }
-
-/* Graph bars */
-.bar-chart { display: flex; flex-direction: column; gap: .4vmin; margin: .5vmin 0; }
-.bar-row { display: flex; align-items: center; gap: .8vmin; }
-.bar-label { width: 14vmin; font-size: clamp(10px, 1vmin, 15px); text-align: right; color: var(--text2); flex-shrink: 0; }
-.bar-track { flex: 1; height: clamp(14px, 1.6vmin, 24px); background: #e2e8f0; border-radius: 4px; position: relative; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 4px; transition: width .5s; display: flex; align-items: center; padding-left: .5vmin; }
-.bar-fill.girls { background: linear-gradient(90deg, #db2777, #f472b6); }
-.bar-fill.boys { background: linear-gradient(90deg, #0284c7, #38bdf8); }
-.bar-val { font-size: clamp(9px, .85vmin, 13px); font-weight: 700; color: #fff; }
-
-/* Hotel cards */
-.hotel-card {
-  background: #fff; border-radius: var(--radius);
-  padding: clamp(8px, 1.2vmin, 18px); border: 2px solid rgba(0,0,0,.08);
-  cursor: pointer; transition: all .2s; text-align: center; display: flex; flex-direction: column;
-}
-.hotel-card:hover { border-color: var(--accent); }
-.hotel-card.selected { border-color: var(--accent); background: #e0f2fe; }
-.hotel-card .hotel-name { font-weight: 700; font-size: clamp(13px, 1.3vmin, 20px); margin-bottom: .5vmin; color: var(--text); }
-.hotel-card .hotel-price { font-size: clamp(10px, 1vmin, 15px); color: var(--amber); font-weight: 600; margin-bottom: .5vmin; }
-.hotel-card ul { list-style: none; font-size: clamp(10px, 1vmin, 15px); color: var(--text2); line-height: 1.6; }
-.hotel-card li::before { content: '•'; color: var(--accent); margin-right: .4vmin; }
-
-/* Title slide */
-.title-slide { align-items: center; justify-content: center; text-align: center; }
-.title-slide h1 { font-size: clamp(28px, 5vmin, 72px); background: linear-gradient(135deg, var(--accent), var(--accent2), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.title-slide .subtitle { font-size: clamp(14px, 1.6vmin, 24px); color: var(--text2); margin-top: .8vmin; }
-.title-slide .meta { font-size: clamp(11px, 1.1vmin, 16px); color: var(--text2); margin-top: 2vmin; display: flex; gap: 2vmin; }
-
-/* Answer key slide */
-.answer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8vmin; }
-.answer-part { background: var(--card-bg); border-radius: var(--radius); padding: clamp(8px, 1.2vmin, 18px); border: 1px solid var(--card-border); }
-.answer-part h4 { margin-bottom: .6vmin; }
-.answer-row { display: flex; justify-content: space-between; padding: .3vmin 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: clamp(10px, 1vmin, 15px); }
-.answer-row .ans { color: var(--green); font-weight: 700; }
-
-/* Scrollbar */
-.slide::-webkit-scrollbar { width: 5px; }
-.slide::-webkit-scrollbar-track { background: transparent; }
-.slide::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 3px; }
-
-/* Signage */
-.sign {
-  background: #f8fafc; border: 3px solid #cbd5e1; border-radius: var(--radius);
-  padding: clamp(8px, 1.2vmin, 18px); max-width: 100%;
-}
-.sign .do-section { margin-bottom: .8vmin; }
-.sign .dont-section {  }
-.sign .sign-head { font-weight: 800; font-size: clamp(13px, 1.4vmin, 22px); margin-bottom: .4vmin; }
-.sign .do { color: var(--green); }
-.sign .dont { color: var(--red); }
-.sign li { list-style: none; font-size: clamp(10px, 1.05vmin, 16px); line-height: 1.7; }
-
-/* Click indicator */
-.clickable { cursor: pointer; }
-.clickable:hover { opacity: .85; }
-
-@media (max-width: 800px) {
-  .grid-2, .grid-60-40, .grid-3, .answer-grid { grid-template-columns: 1fr; }
-}
-</style>
+        /* Form Inputs Styling */
+        input[type="text"], select {
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-bottom-color: #2563eb;
+            background-color: #eff6ff;
+        }
+        
+        .mcq-btn {
+            transition: all 0.2s;
+        }
+    </style>
 </head>
 <body>
-<div id="wrapper">
-<div id="stage">
 
-<!-- Slide 1: Title -->
-<div class="slide active" data-index="0">
-  <div class="title-slide" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    <h1 contenteditable="true">Form 1 English Paper 1</h1>
-    <p class="subtitle" contenteditable="true">Interactive Slide Deck for Classroom Teaching</p>
-    <div class="meta">
-      <span contenteditable="true">Paper 1 (Sample)</span>
-      <span contenteditable="true">Parts 1 – 5</span>
-      <span contenteditable="true">40 Questions</span>
+    <!-- Main 16:9 Presentation Container -->
+    <div id="smartboard-container">
+        
+        <!-- Header -->
+        <header class="bg-blue-800 text-white py-4 px-6 flex justify-between items-center shadow-md z-10">
+            <h1 class="text-2xl font-bold tracking-wide"><i class="fa-solid fa-chalkboard-user mr-2"></i> Form 1 English - Paper 1 Review</h1>
+            <div id="part-indicator" class="text-xl font-semibold bg-blue-700 px-4 py-1 rounded-full">Title</div>
+        </header>
+
+        <!-- SLIDES CONTAINER -->
+        <main class="flex-1 relative bg-slate-50 text-slate-800 text-2xl">
+            
+            <!-- Slide 0: Title Slide -->
+            <div class="slide active" data-part="Welcome">
+                <div class="flex-1 flex flex-col items-center justify-center text-center">
+                    <i class="fa-solid fa-graduation-cap text-8xl text-blue-600 mb-6"></i>
+                    <h1 class="text-6xl font-extrabold text-slate-800 mb-4">English Paper 1</h1>
+                    <h2 class="text-4xl text-slate-600 mb-8">Form 1 Examination Review</h2>
+                    <p class="text-2xl text-slate-500 max-w-3xl">Interactive discussion deck. Use the controls below to navigate through the questions. You can edit answers on the screen live.</p>
+                    <button onclick="nextSlide()" class="mt-12 bg-blue-600 hover:bg-blue-700 text-white text-3xl px-10 py-4 rounded-xl shadow-lg transition transform hover:scale-105">
+                        Start Review <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slide 1: Part 1 Q1 -->
+            <div class="slide" data-part="Part 1: Short Texts (MCQ)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-bold text-blue-800">Question 1</h2>
+                        <span class="bg-blue-100 text-blue-800 px-4 py-1 rounded-lg text-xl">Dialogue</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-2 gap-8">
+                        <div class="bg-white p-8 rounded-xl shadow-md border-l-8 border-blue-500 text-3xl leading-relaxed flex flex-col justify-center">
+                            <p><strong>Aisyah:</strong> Hi! I am Aisyah.</p>
+                            <p><strong>Linda:</strong> Hi! I am Linda.</p>
+                            <p><strong>Aisyah:</strong> Which class are you in?</p>
+                            <p><strong>Linda:</strong> I am in Form 1 Ibnu Sina.</p>
+                            <p><strong>Aisyah:</strong> Where do you live?</p>
+                            <p><strong>Linda:</strong> ?</p>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-6 mcq-container">
+                            <p class="text-3xl font-semibold mb-2">Which of the sentences below is a possible response to Aisyah's question?</p>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">A. She walks to school every day.</button>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">B. Her favourite food is Chicken Rice.</button>
+                            <button onclick="checkMCQ(this)" data-correct="true" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">C. I live at No. 18, Jalan Sentosa, Masai Johor.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Part 1 Q2 -->
+            <div class="slide" data-part="Part 1: Short Texts (MCQ)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-bold text-blue-800">Question 2</h2>
+                        <span class="bg-blue-100 text-blue-800 px-4 py-1 rounded-lg text-xl">Protect Your Privacy</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-2 gap-8">
+                        <div class="bg-white p-8 rounded-xl shadow-md border-l-8 border-blue-500 text-3xl leading-relaxed flex flex-col justify-center">
+                            <p>Be cautious about sharing personal information such as your address, phone number, and financial details. Use privacy settings to control who can see your posts and profile.</p>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-6 mcq-container">
+                            <p class="text-3xl font-semibold mb-2">What is one way to control who can see your posts and profile on social networking sites?</p>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">A. Ignore friend requests</button>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">B. Share your password</button>
+                            <button onclick="checkMCQ(this)" data-correct="true" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">C. Use privacy settings</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Part 1 Q3 -->
+            <div class="slide" data-part="Part 1: Short Texts (MCQ)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-bold text-blue-800">Question 3</h2>
+                        <span class="bg-blue-100 text-blue-800 px-4 py-1 rounded-lg text-xl">Sports Event Invitation</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-12 gap-8">
+                        <div class="col-span-7 bg-white p-8 rounded-xl shadow-md border-l-8 border-blue-500 text-2xl leading-relaxed flex flex-col justify-center">
+                            <h3 class="font-bold text-3xl mb-4 text-center">Join us for the Annual Inter-School Sports Competition!</h3>
+                            <ul class="list-disc pl-8 mb-4 font-semibold text-slate-700">
+                                <li>Date: October 25, 2024</li>
+                                <li>Time: 9:00 AM - 4:00 PM</li>
+                                <li>Location: Ipoh Stadium</li>
+                            </ul>
+                            <p>Come and cheer for your favorite teams as they compete in various sports, including football, basketball, and track events. This is a great opportunity to showcase your school spirit and enjoy a day filled with fun and excitement!</p>
+                        </div>
+                        <div class="col-span-5 flex flex-col justify-center space-y-6 mcq-container">
+                            <p class="text-3xl font-semibold mb-2">Which of the following sports is <strong>NOT</strong> mentioned as part of the events?</p>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">A. Football</button>
+                            <button onclick="checkMCQ(this)" data-correct="true" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">B. Volleyball</button>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">C. Basketball</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Part 1 Q4 -->
+            <div class="slide" data-part="Part 1: Short Texts (MCQ)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-bold text-blue-800">Question 4</h2>
+                        <span class="bg-blue-100 text-blue-800 px-4 py-1 rounded-lg text-xl">Graphs Data</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-xl shadow-md border-t-8 border-blue-500 flex flex-col">
+                            <h3 class="font-bold text-2xl mb-6 text-center">Time Spent by Teenagers (Hours)</h3>
+                            <div class="flex-1 space-y-6">
+                                <!-- Data Visualization bars -->
+                                <div>
+                                    <p class="font-semibold mb-1">Talking to friends</p>
+                                    <div class="flex items-center gap-2 mb-1"><span class="w-16">Girls:</span><div class="bg-pink-400 h-6 rounded-r" style="width: 76%"></div> <span class="text-lg">38</span></div>
+                                    <div class="flex items-center gap-2"><span class="w-16">Boys:</span><div class="bg-blue-400 h-6 rounded-r" style="width: 72%"></div> <span class="text-lg">36</span></div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold mb-1">Sleeping</p>
+                                    <div class="flex items-center gap-2 mb-1"><span class="w-16">Girls:</span><div class="bg-pink-400 h-6 rounded-r" style="width: 48%"></div> <span class="text-lg">24</span></div>
+                                    <div class="flex items-center gap-2"><span class="w-16">Boys:</span><div class="bg-blue-400 h-6 rounded-r" style="width: 48%"></div> <span class="text-lg">24</span></div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold mb-1">Doing Homework</p>
+                                    <div class="flex items-center gap-2 mb-1"><span class="w-16">Girls:</span><div class="bg-pink-400 h-6 rounded-r" style="width: 28%"></div> <span class="text-lg">14</span></div>
+                                    <div class="flex items-center gap-2"><span class="w-16">Boys:</span><div class="bg-blue-400 h-6 rounded-r" style="width: 64%"></div> <span class="text-lg">32</span></div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold mb-1">Housework</p>
+                                    <div class="flex items-center gap-2 mb-1"><span class="w-16">Girls:</span><div class="bg-pink-400 h-6 rounded-r" style="width: 52%"></div> <span class="text-lg">26</span></div>
+                                    <div class="flex items-center gap-2"><span class="w-16">Boys:</span><div class="bg-blue-400 h-6 rounded-r" style="width: 12%"></div> <span class="text-lg">6</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-4 mcq-container">
+                            <p class="text-3xl font-semibold mb-2">From the data above, we observe that:</p>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-5 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-xl shadow-sm">A. Teenage girls and boys spend the least time talking to friends.</button>
+                            <button onclick="checkMCQ(this)" data-correct="true" class="mcq-btn w-full text-left p-5 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-xl shadow-sm">B. Teenage girls and boys spend the same amount of time sleeping.</button>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-5 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-xl shadow-sm">C. Teenage girls and boys spend more time helping out with the housework than doing homework.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Part 1 Q5 -->
+            <div class="slide" data-part="Part 1: Short Texts (MCQ)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-bold text-blue-800">Question 5</h2>
+                        <span class="bg-blue-100 text-blue-800 px-4 py-1 rounded-lg text-xl">Signage</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-2 gap-8">
+                        <div class="bg-yellow-100 p-8 rounded-xl shadow-md border-4 border-yellow-400 text-3xl flex flex-col justify-center items-center">
+                            <div class="w-full mb-8">
+                                <h3 class="font-black text-green-700 mb-2">DO:</h3>
+                                <ul class="list-disc pl-10 font-bold">
+                                    <li>BUY YOUR TICKETS EARLY</li>
+                                    <li>TURN OFF YOUR CELL PHONES</li>
+                                    <li>DRESS APPROPRIATELY</li>
+                                </ul>
+                            </div>
+                            <div class="w-full">
+                                <h3 class="font-black text-red-600 mb-2">DON'T:</h3>
+                                <ul class="list-disc pl-10 font-bold">
+                                    <li>TALK LOUDLY</li>
+                                    <li>TOUCH THE THINGS ON DISPLAY</li>
+                                    <li>KEEP YOUR CAMERA FLASH ON</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-6 mcq-container">
+                            <p class="text-3xl font-semibold mb-2">You would most likely see the sign above when visiting a:</p>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">A. festival</button>
+                            <button onclick="checkMCQ(this)" data-correct="true" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">B. museum</button>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">C. friend's house</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Part 1 Q6 -->
+            <div class="slide" data-part="Part 1: Short Texts (MCQ)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-bold text-blue-800">Question 6</h2>
+                        <span class="bg-blue-100 text-blue-800 px-4 py-1 rounded-lg text-xl">Instrument</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-2 gap-8">
+                        <div class="bg-white p-8 rounded-xl shadow-md border-l-8 border-blue-500 text-3xl leading-relaxed flex flex-col justify-center">
+                            <p>Harmonica is probably the easiest instrument to play. It is inexpensive, sounds fantastic right from the start and is completely portable—carry it wherever you go. There are generally three basic types of Harmonicas: Diatonic, Chromatic, and Tremolo.</p>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-6 mcq-container">
+                            <p class="text-3xl font-semibold mb-2">Aidil is advised to learn Harmonica due to budget; because it is:</p>
+                            <button onclick="checkMCQ(this)" data-correct="true" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">A. affordable and simple to learn</button>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">B. portable with three basic types</button>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">C. has a fantastic sound</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Part 1 Q7 -->
+            <div class="slide" data-part="Part 1: Short Texts (MCQ)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-bold text-blue-800">Question 7</h2>
+                        <span class="bg-blue-100 text-blue-800 px-4 py-1 rounded-lg text-xl">Advertisement</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-2 gap-8">
+                        <div class="bg-indigo-900 text-white p-8 rounded-xl shadow-md border-4 border-indigo-500 text-center flex flex-col justify-center items-center">
+                            <h3 class="text-4xl font-bold text-yellow-400 mb-6">Family Movie Night Just Got Better!</h3>
+                            <p class="text-2xl mb-6">Gather the family for endless entertainment with our extensive library of kids' shows. Enjoy family-friendly options that everyone will love.</p>
+                            <p class="text-3xl font-bold">Join Streamix today!</p>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-6 mcq-container">
+                            <p class="text-3xl font-semibold mb-2">What type of content is highlighted in the advertisement?</p>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">A. Reality TV</button>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">B. Educational programs</button>
+                            <button onclick="checkMCQ(this)" data-correct="true" class="mcq-btn w-full text-left p-6 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-2xl shadow-sm">C. Family-friendly shows</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Part 1 Q8 -->
+            <div class="slide" data-part="Part 1: Short Texts (MCQ)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-bold text-blue-800">Question 8</h2>
+                        <span class="bg-blue-100 text-blue-800 px-4 py-1 rounded-lg text-xl">Hotel Selection</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-12 gap-6">
+                        <div class="col-span-7 flex flex-col gap-4 justify-center">
+                            <div class="bg-white p-4 rounded shadow border-l-8 border-green-500">
+                                <h3 class="font-bold text-xl">Pertama Hotel (RM 500)</h3>
+                                <p class="text-lg text-slate-600">Kids pool, baby sitting, grocery store</p>
+                            </div>
+                            <div class="bg-white p-4 rounded shadow border-l-8 border-blue-500">
+                                <h3 class="font-bold text-xl">Great One Hotel (RM 500)</h3>
+                                <p class="text-lg text-slate-600">Free Wi-Fi, outdoor swimming pool, fitness centre, all day free buffet and free spa vouchers</p>
+                            </div>
+                            <div class="bg-white p-4 rounded shadow border-l-8 border-purple-500">
+                                <h3 class="font-bold text-xl">Grand Horizon Hotel (RM 500)</h3>
+                                <p class="text-lg text-slate-600">Wi-Fi @ RM 10 per day, Gym, buffet breakfast only, family rooms</p>
+                            </div>
+                        </div>
+                        <div class="col-span-5 flex flex-col justify-center space-y-4 mcq-container">
+                            <div class="bg-blue-50 p-4 rounded-lg mb-2">
+                                <p class="text-2xl font-semibold">Encik Ahmad needs a hotel for his family; considering <span class="text-blue-600 underline">activities</span> and <span class="text-blue-600 underline">spa facilities</span>.</p>
+                                <p class="text-xl mt-2">Which one is suitable for him?</p>
+                            </div>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-4 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-xl shadow-sm">A. Pertama Hotel</button>
+                            <button onclick="checkMCQ(this)" data-correct="true" class="mcq-btn w-full text-left p-4 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-xl shadow-sm">B. Great One Hotel</button>
+                            <button onclick="checkMCQ(this)" data-correct="false" class="mcq-btn w-full text-left p-4 rounded-xl border-4 border-slate-200 bg-white hover:bg-slate-100 text-xl shadow-sm">C. Grand Horizon Hotel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Part 2 (Q9-Q12) -->
+            <div class="slide" data-part="Part 2: Error Correction (Q9 - Q12)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-bold text-green-700">Questions 9 to 12</h2>
+                        <span class="bg-green-100 text-green-800 px-4 py-1 rounded-lg text-xl">Being a Teenager</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-12 gap-10">
+                        <div class="col-span-7 bg-white p-8 rounded-xl shadow-md border-t-8 border-green-500 text-[26px] leading-loose text-justify">
+                            <p class="mb-4">Being a teenager is a phase filled with so (0) <span class="font-bold underline decoration-red-500">many</span> emotions, experiences, and challenges. It is a time when we are <strong>(9) ________</strong> from childhood to adulthood, trying to find our place in the world and figuring out who we are as individuals.</p>
+                            <p>In my childhood, I was a happy-go-lucky kid. I constantly <strong>(10) ________</strong> with friends without any worries about anything. During my teenage years, I went through changes — physically, mentally, and most of all emotionally. The changes I was going through <strong>(11) ________</strong> me a better person.</p>
+                            <p>As a teenager, I gained a lot of freedom. I <strong>(12) ________</strong> creating good memories that I treasure in my adult life.</p>
+                        </div>
+                        <div class="col-span-5 flex flex-col justify-center space-y-8 bg-slate-100 p-8 rounded-xl border-2 border-slate-200">
+                            <p class="text-xl text-slate-500 mb-2 italic">Edit the fields below or toggle answers:</p>
+                            
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-3xl w-12 text-right">0.</span>
+                                <input type="text" value="much" readonly class="flex-1 bg-gray-200 border-b-4 border-gray-400 p-3 text-2xl text-gray-600 rounded">
+                                <span class="text-sm bg-gray-300 px-2 py-1 rounded">Example</span>
+                            </div>
+
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-3xl w-12 text-right">9.</span>
+                                <input type="text" data-answer="transitioning" value="transitioning" class="answer-input flex-1 bg-white border-b-4 border-blue-400 focus:border-blue-700 p-3 text-2xl text-blue-900 rounded shadow-inner font-semibold">
+                                <span class="text-sm text-red-500 font-bold bg-red-100 px-2 py-1 rounded">transitioned</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-3xl w-12 text-right">10.</span>
+                                <input type="text" data-answer="played" value="played" class="answer-input flex-1 bg-white border-b-4 border-blue-400 focus:border-blue-700 p-3 text-2xl text-blue-900 rounded shadow-inner font-semibold">
+                                <span class="text-sm text-red-500 font-bold bg-red-100 px-2 py-1 rounded">plays</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-3xl w-12 text-right">11.</span>
+                                <input type="text" data-answer="made" value="made" class="answer-input flex-1 bg-white border-b-4 border-blue-400 focus:border-blue-700 p-3 text-2xl text-blue-900 rounded shadow-inner font-semibold">
+                                <span class="text-sm text-red-500 font-bold bg-red-100 px-2 py-1 rounded">make</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-3xl w-12 text-right">12.</span>
+                                <input type="text" data-answer="was" value="was" class="answer-input flex-1 bg-white border-b-4 border-blue-400 focus:border-blue-700 p-3 text-2xl text-blue-900 rounded shadow-inner font-semibold">
+                                <span class="text-sm text-red-500 font-bold bg-red-100 px-2 py-1 rounded">am</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 10: Part 2 (Q13-Q16) -->
+            <div class="slide" data-part="Part 2: Error Correction (Q13 - Q16)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-bold text-green-700">Questions 13 to 16</h2>
+                        <span class="bg-green-100 text-green-800 px-4 py-1 rounded-lg text-xl">Being a Teenager</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-12 gap-10">
+                        <div class="col-span-7 bg-white p-8 rounded-xl shadow-md border-t-8 border-green-500 text-[26px] leading-loose text-justify">
+                            <p class="mb-4">I was able to stay up longer during the weekends and went to the movies with my friends. The freedom that my parents gave me, <strong>(13) ________</strong> with greater responsibilities. I understood the value of trust that my parents had entrusted me with. How <strong>(14) ________</strong> I survive?</p>
+                            <p>It wasn't smooth sailing. I had my equal share of problems. Despite that, I <strong>(15) ________</strong> my teenage life as the best years of my life and wish it <strong>(16) ________</strong> end.</p>
+                        </div>
+                        <div class="col-span-5 flex flex-col justify-center space-y-8 bg-slate-100 p-8 rounded-xl border-2 border-slate-200">
+                            
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-3xl w-12 text-right">13.</span>
+                                <input type="text" data-answer="came" value="came" class="answer-input flex-1 bg-white border-b-4 border-blue-400 focus:border-blue-700 p-3 text-2xl text-blue-900 rounded shadow-inner font-semibold">
+                                <span class="text-sm text-red-500 font-bold bg-red-100 px-2 py-1 rounded">comes</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-3xl w-12 text-right">14.</span>
+                                <input type="text" data-answer="did" value="did" class="answer-input flex-1 bg-white border-b-4 border-blue-400 focus:border-blue-700 p-3 text-2xl text-blue-900 rounded shadow-inner font-semibold">
+                                <span class="text-sm text-red-500 font-bold bg-red-100 px-2 py-1 rounded">does</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-3xl w-12 text-right">15.</span>
+                                <input type="text" data-answer="consider" value="consider" class="answer-input flex-1 bg-white border-b-4 border-blue-400 focus:border-blue-700 p-3 text-2xl text-blue-900 rounded shadow-inner font-semibold">
+                                <span class="text-sm text-red-500 font-bold bg-red-100 px-2 py-1 rounded">considering</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-3xl w-12 text-right">16.</span>
+                                <input type="text" data-answer="didn't" value="didn't" class="answer-input flex-1 bg-white border-b-4 border-blue-400 focus:border-blue-700 p-3 text-2xl text-blue-900 rounded shadow-inner font-semibold">
+                                <span class="text-sm text-red-500 font-bold bg-red-100 px-2 py-1 rounded">don't</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: Part 3 (Q17-Q20) -->
+            <div class="slide" data-part="Part 3: Info Transfer (Q17 - Q20)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-4xl font-bold text-purple-700">Questions 17 to 20</h2>
+                        <span class="bg-purple-100 text-purple-800 px-4 py-1 rounded-lg text-xl">Cultural Festivals</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-2 gap-8">
+                        <!-- Passage -->
+                        <div class="bg-white p-6 rounded-xl shadow-md border-t-8 border-purple-500 text-xl leading-relaxed">
+                            <p class="mb-4">A cultural festival is an event that celebrates the cultural heritage and traditions of a particular community or region. These festivals typically include traditional music, dance and food. Some well-known cultural festivals include Oktoberfest in Germany, Carnival in Brazil, Diwali in India, and Chinese New Year in China.</p>
+                            <p class="text-gray-500 italic text-lg">(Read full text on paper...)</p>
+                        </div>
+                        <!-- Table Questions -->
+                        <div class="flex flex-col space-y-4">
+                            <div class="bg-slate-100 p-4 rounded-xl border border-slate-300">
+                                <p class="font-bold text-slate-700 mb-2">Meaning of cultural festival</p>
+                                <div class="flex gap-3 items-center">
+                                    <span class="font-bold w-8">17.</span>
+                                    <input type="text" data-answer="cultural heritage and traditions" value="cultural heritage and traditions" class="answer-input flex-1 p-2 border-b-4 border-purple-400 rounded bg-white text-xl text-purple-900 font-semibold shadow-inner">
+                                </div>
+                            </div>
+                            
+                            <div class="bg-slate-100 p-4 rounded-xl border border-slate-300">
+                                <p class="font-bold text-slate-700 mb-2">3 elements found in every cultural festival</p>
+                                <div class="flex flex-col gap-3">
+                                    <div class="flex gap-3 items-center">
+                                        <span class="font-bold w-8">18.</span>
+                                        <input type="text" data-answer="traditional music" value="traditional music" class="answer-input flex-1 p-2 border-b-4 border-purple-400 rounded bg-white text-xl text-purple-900 font-semibold shadow-inner">
+                                    </div>
+                                    <div class="flex gap-3 items-center">
+                                        <span class="font-bold w-8">19.</span>
+                                        <input type="text" data-answer="dance" value="dance" class="answer-input flex-1 p-2 border-b-4 border-purple-400 rounded bg-white text-xl text-purple-900 font-semibold shadow-inner">
+                                    </div>
+                                    <div class="flex gap-3 items-center">
+                                        <span class="font-bold w-8">20.</span>
+                                        <input type="text" data-answer="food" value="food" class="answer-input flex-1 p-2 border-b-4 border-purple-400 rounded bg-white text-xl text-purple-900 font-semibold shadow-inner">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 12: Part 3 (Q21-Q24) -->
+            <div class="slide" data-part="Part 3: Info Transfer (Q21 - Q24)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-4xl font-bold text-purple-700">Questions 21 to 24</h2>
+                        <span class="bg-purple-100 text-purple-800 px-4 py-1 rounded-lg text-xl">Cultural Festivals</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-2 gap-8">
+                        <!-- Passage Part 2 -->
+                        <div class="bg-white p-6 rounded-xl shadow-md border-t-8 border-purple-500 text-xl leading-relaxed">
+                            <p class="mb-4">Attending cultural festivals is a great way to gain a deeper understanding of the different cultures and learn about their way of life...</p>
+                            <p>There are several resources you can use to find information about cultural festivals in different countries. Travel guidebooks, online travel forums, and local tourism boards are all great sources of information. You can also search for specific festivals online or through social media, or ask locals for recommendations when you arrive at a new destination.</p>
+                        </div>
+                        <!-- Table Questions -->
+                        <div class="flex flex-col space-y-4">
+                            <div class="bg-slate-100 p-4 rounded-xl border border-slate-300">
+                                <p class="font-bold text-slate-700 mb-2">Well-known festival celebrated in Germany</p>
+                                <div class="flex gap-3 items-center">
+                                    <span class="font-bold w-8">21.</span>
+                                    <input type="text" data-answer="Oktoberfest" value="Oktoberfest" class="answer-input flex-1 p-2 border-b-4 border-purple-400 rounded bg-white text-xl text-purple-900 font-semibold shadow-inner">
+                                </div>
+                            </div>
+                            
+                            <div class="bg-slate-100 p-4 rounded-xl border border-slate-300">
+                                <p class="font-bold text-slate-700 mb-2">Benefits of attending cultural festivals</p>
+                                <div class="flex flex-col gap-3">
+                                    <div class="flex gap-3 items-center">
+                                        <span class="font-bold w-8">22.</span>
+                                        <input type="text" data-answer="different cultures" value="different cultures" class="answer-input flex-1 p-2 border-b-4 border-purple-400 rounded bg-white text-xl text-purple-900 font-semibold shadow-inner">
+                                    </div>
+                                    <div class="flex gap-3 items-center">
+                                        <span class="font-bold w-8">23.</span>
+                                        <input type="text" data-answer="their way of life" value="their way of life" class="answer-input flex-1 p-2 border-b-4 border-purple-400 rounded bg-white text-xl text-purple-900 font-semibold shadow-inner">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-100 p-4 rounded-xl border border-slate-300">
+                                <p class="font-bold text-slate-700 mb-2">Information source when in a certain country</p>
+                                <div class="flex gap-3 items-center">
+                                    <span class="font-bold w-8">24.</span>
+                                    <input type="text" data-answer="asking the locals" value="asking the locals" class="answer-input flex-1 p-2 border-b-4 border-purple-400 rounded bg-white text-xl text-purple-900 font-semibold shadow-inner">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 13: Part 4 (Q25-Q28) True/False -->
+            <div class="slide" data-part="Part 4: Short Answers (Q25 - Q28)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-4xl font-bold text-orange-700">Questions 25 to 28 (True / False)</h2>
+                        <span class="bg-orange-100 text-orange-800 px-4 py-1 rounded-lg text-xl">Cancun Underwater Museum</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-12 gap-8">
+                        <div class="col-span-7 bg-white p-6 rounded-xl shadow-md border-t-8 border-orange-500 text-[22px] leading-relaxed">
+                            <p class="mb-4">The Cancun Underwater Museum or Museo Subacuático de Arte (M.U.S.A.) in Mexico prides itself as being the biggest underwater museum in the world...</p>
+                            <p class="mb-4">Located near the island of Isla Mujeres and the coast of Punta Nizuc in Cancún off the coast of Mexico, the underwater museum features over 500 permanent life-size sculptures created by British sculptor Jason deCaires Taylor. It was formally opened to the public on November 26, 2010.</p>
+                            <p>The museum is divided into two galleries. Salon Machones is eight metres deep and suitable for both divers and snorkelers. Salon Nizuc is four metres deep and only permitted for snorkelling.</p>
+                        </div>
+                        <div class="col-span-5 flex flex-col justify-center space-y-6">
+                            <div class="bg-slate-100 p-4 rounded-lg flex items-center justify-between border-2 border-slate-200">
+                                <p class="flex-1 pr-4 text-xl leading-tight"><strong>25.</strong> M.U.S.A. is the acronym for Cancun Underwater Museum or Museo Subacuático de Arte.</p>
+                                <select class="answer-select text-2xl p-2 font-bold bg-white border-2 border-orange-400 rounded cursor-pointer" data-answer="True">
+                                    <option value="">--</option>
+                                    <option value="True" selected>True</option>
+                                    <option value="False">False</option>
+                                </select>
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-lg flex items-center justify-between border-2 border-slate-200">
+                                <p class="flex-1 pr-4 text-xl leading-tight"><strong>26.</strong> The museum is located within Mexico City Island.</p>
+                                <select class="answer-select text-2xl p-2 font-bold bg-white border-2 border-orange-400 rounded cursor-pointer" data-answer="False">
+                                    <option value="">--</option>
+                                    <option value="True">True</option>
+                                    <option value="False" selected>False</option>
+                                </select>
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-lg flex items-center justify-between border-2 border-slate-200">
+                                <p class="flex-1 pr-4 text-xl leading-tight"><strong>27.</strong> There are a total of 500 life size sculptures on display.</p>
+                                <select class="answer-select text-2xl p-2 font-bold bg-white border-2 border-orange-400 rounded cursor-pointer" data-answer="True">
+                                    <option value="">--</option>
+                                    <option value="True" selected>True</option>
+                                    <option value="False">False</option>
+                                </select>
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-lg flex items-center justify-between border-2 border-slate-200">
+                                <p class="flex-1 pr-4 text-xl leading-tight"><strong>28.</strong> The Salon Machones is four metres deep and suitable for both divers and snorkelers.</p>
+                                <select class="answer-select text-2xl p-2 font-bold bg-white border-2 border-orange-400 rounded cursor-pointer" data-answer="False">
+                                    <option value="">--</option>
+                                    <option value="True">True</option>
+                                    <option value="False" selected>False</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 14: Part 4 (Q29-Q32) Short Answers -->
+            <div class="slide" data-part="Part 4: Short Answers (Q29 - Q32)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-4xl font-bold text-orange-700">Questions 29 to 32</h2>
+                        <span class="bg-orange-100 text-orange-800 px-4 py-1 rounded-lg text-xl">Cancun Underwater Museum</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-12 gap-8">
+                        <div class="col-span-6 bg-white p-6 rounded-xl shadow-md border-t-8 border-orange-500 text-[20px] leading-relaxed">
+                            <p class="mb-4">... features over 500 permanent life-size sculptures created by British sculptor Jason deCaires Taylor. It was formally opened to the public on November 26, 2010.</p>
+                            <p>...Cancún Marine Park is one of the most visited stretches of water in the world. It receives over 750,000 visitors a year, which places immense pressure on its natural resources. Visitors to the marine park now divide their time between the museum and the natural reef, providing significant rest for natural overstressed areas.</p>
+                        </div>
+                        <div class="col-span-6 flex flex-col justify-center space-y-6 text-xl">
+                            <div class="bg-slate-100 p-4 rounded-lg border-2 border-slate-200">
+                                <p class="mb-2"><strong>29.</strong> M.U.S.A. is considered as the world's ____________________.</p>
+                                <input type="text" data-answer="biggest underwater museum" value="biggest underwater museum" class="answer-input w-full p-2 border-b-4 border-orange-400 rounded bg-white text-orange-900 font-bold shadow-inner">
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-lg border-2 border-slate-200">
+                                <p class="mb-2"><strong>30.</strong> The nationality of the sculptor Jason de Caires Taylor is ____________________.</p>
+                                <input type="text" data-answer="British" value="British" class="answer-input w-full p-2 border-b-4 border-orange-400 rounded bg-white text-orange-900 font-bold shadow-inner">
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-lg border-2 border-slate-200">
+                                <p class="mb-2"><strong>31.</strong> Visitors were first allowed to view the sculptures on ____________________.</p>
+                                <input type="text" data-answer="November 26, 2010" value="November 26, 2010" class="answer-input w-full p-2 border-b-4 border-orange-400 rounded bg-white text-orange-900 font-bold shadow-inner">
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-lg border-2 border-slate-200">
+                                <p class="mb-2"><strong>32.</strong> What provides the overstressed natural reef areas a much-needed rest? ____________________.</p>
+                                <input type="text" data-answer="the museum and natural reef" value="the museum and natural reef" class="answer-input w-full p-2 border-b-4 border-orange-400 rounded bg-white text-orange-900 font-bold shadow-inner">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 15: Part 5 (Q33-Q36) -->
+            <div class="slide" data-part="Part 5: Gap Filling (Q33 - Q36)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-4xl font-bold text-teal-700">Questions 33 to 36</h2>
+                        <span class="bg-teal-100 text-teal-800 px-4 py-1 rounded-lg text-xl">Jordan Romero</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-12 gap-6">
+                        <div class="col-span-8 bg-white p-6 rounded-xl shadow-md border-t-8 border-teal-500 text-2xl leading-loose">
+                            <p class="mb-4">Jordan Romero is an American mountain climber. At the age of 9, he made it his lifelong goal to conquer all of the seven peaks. <strong>(33) ________</strong>. He started his mountain climbing journey by training non-stop when he was 9 years old. <strong>(34) ________</strong>. He then set his sight at conquering Mount Everest.</p>
+                            <p>At just 13 years old, Jordan reached the peak of Mount Everest. This made him the youngest person to arrive at the summit. In December 2011, he reached another milestone achievement. <strong>(35) ________</strong>. Jordan then went on to write a book, 'No Summit Out of Sight'. In this book, he shared his experiences of preparing for the climbs and the dangers and thrills of the ascents. <strong>(36) ________</strong>.</p>
+                        </div>
+                        <div class="col-span-4 flex flex-col space-y-4">
+                            <div class="bg-teal-50 p-4 rounded-xl border border-teal-200 shadow-sm text-lg space-y-3 font-medium">
+                                <p class="border-b pb-2"><strong>A.</strong> After a year of setting his mind on conquering all seven mountains, Jordan started his adventures by climbing the dormant volcano...</p>
+                                <p class="border-b pb-2"><strong>B.</strong> He even included about the physical and emotional endurance needed for his goals.</p>
+                                <p class="border-b pb-2"><strong>C.</strong> At Jordan's age, not many children have such ambition.</p>
+                                <p><strong>D.</strong> He became the youngest person to conquer most of the peaks of the Seven Summits.</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mt-auto">
+                                <div class="bg-slate-100 p-3 rounded text-center border-2 border-slate-300">
+                                    <span class="font-bold mr-2">33.</span>
+                                    <select class="answer-select text-xl p-1 bg-white border border-teal-400 rounded" data-answer="C">
+                                        <option value="">-</option><option value="A">A</option><option value="B">B</option><option value="C" selected>C</option><option value="D">D</option>
+                                    </select>
+                                </div>
+                                <div class="bg-slate-100 p-3 rounded text-center border-2 border-slate-300">
+                                    <span class="font-bold mr-2">34.</span>
+                                    <select class="answer-select text-xl p-1 bg-white border border-teal-400 rounded" data-answer="A">
+                                        <option value="">-</option><option value="A" selected>A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option>
+                                    </select>
+                                </div>
+                                <div class="bg-slate-100 p-3 rounded text-center border-2 border-slate-300">
+                                    <span class="font-bold mr-2">35.</span>
+                                    <select class="answer-select text-xl p-1 bg-white border border-teal-400 rounded" data-answer="D">
+                                        <option value="">-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D" selected>D</option>
+                                    </select>
+                                </div>
+                                <div class="bg-slate-100 p-3 rounded text-center border-2 border-slate-300">
+                                    <span class="font-bold mr-2">36.</span>
+                                    <select class="answer-select text-xl p-1 bg-white border border-teal-400 rounded" data-answer="B">
+                                        <option value="">-</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option><option value="D">D</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 16: Part 5 (Q37-Q40) -->
+            <div class="slide" data-part="Part 5: Gap Filling (Q37 - Q40)">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-4xl font-bold text-teal-700">Questions 37 to 40</h2>
+                        <span class="bg-teal-100 text-teal-800 px-4 py-1 rounded-lg text-xl">Talent Search</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-12 gap-6">
+                        <div class="col-span-8 bg-white p-6 rounded-xl shadow-md border-t-8 border-teal-500 text-[20px] leading-loose">
+                            <p class="mb-2">This year the class of Form 1 Smart decided to do a project which would be educational and fun at the same time. We came up with the idea of making a talent show. <strong>(37) ________</strong>. She gave us a task which was to find our talent...</p>
+                            <p class="mb-2">The first thing that we needed to do was write our script. It was pretty hard for some of us... Because of that, the show was almost cancelled. <strong>(38) ________</strong>. After the June Holiday we all came back motivated as ever and started working very hard...</p>
+                            <p>Then came the day of the final rehearsal... At the beginning nobody came to watch but then people from activity groups came to assist in the rehearsals. They thought we were great. <strong>(39) ________</strong>. A few days later came the D-day and it was a success. More than sixty people attended our show... Personally, I felt great. <strong>(40) ________</strong>. All in all, we had an amazing experience.</p>
+                        </div>
+                        <div class="col-span-4 flex flex-col space-y-4">
+                            <div class="bg-teal-50 p-4 rounded-xl border border-teal-200 shadow-sm text-lg space-y-3 font-medium">
+                                <p class="border-b pb-2"><strong>A.</strong> At the end of the show, the school headmaster came to us and told us it was such an amazing performance.</p>
+                                <p class="border-b pb-2"><strong>B.</strong> Our teacher, Madam Maslina advised us and not to give up.</p>
+                                <p class="border-b pb-2"><strong>C.</strong> The compliments boosted our confidence.</p>
+                                <p><strong>D.</strong> First our English teacher introduced us to the idea and everyone accepted it.</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mt-auto">
+                                <div class="bg-slate-100 p-3 rounded text-center border-2 border-slate-300">
+                                    <span class="font-bold mr-2">37.</span>
+                                    <select class="answer-select text-xl p-1 bg-white border border-teal-400 rounded" data-answer="D">
+                                        <option value="">-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D" selected>D</option>
+                                    </select>
+                                </div>
+                                <div class="bg-slate-100 p-3 rounded text-center border-2 border-slate-300">
+                                    <span class="font-bold mr-2">38.</span>
+                                    <select class="answer-select text-xl p-1 bg-white border border-teal-400 rounded" data-answer="B">
+                                        <option value="">-</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option><option value="D">D</option>
+                                    </select>
+                                </div>
+                                <div class="bg-slate-100 p-3 rounded text-center border-2 border-slate-300">
+                                    <span class="font-bold mr-2">39.</span>
+                                    <select class="answer-select text-xl p-1 bg-white border border-teal-400 rounded" data-answer="C">
+                                        <option value="">-</option><option value="A">A</option><option value="B">B</option><option value="C" selected>C</option><option value="D">D</option>
+                                    </select>
+                                </div>
+                                <div class="bg-slate-100 p-3 rounded text-center border-2 border-slate-300">
+                                    <span class="font-bold mr-2">40.</span>
+                                    <select class="answer-select text-xl p-1 bg-white border border-teal-400 rounded" data-answer="A">
+                                        <option value="">-</option><option value="A" selected>A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer / Navigation -->
+        <footer class="bg-slate-800 text-white p-4 flex justify-between items-center z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+            <button onclick="prevSlide()" class="bg-slate-700 hover:bg-slate-600 px-6 py-3 rounded text-xl flex items-center transition">
+                <i class="fa-solid fa-chevron-left mr-3"></i> Previous
+            </button>
+            
+            <div class="flex items-center gap-6">
+                <span id="slide-counter" class="text-xl font-mono bg-slate-900 px-4 py-1 rounded">1 / 17</span>
+                <button id="toggle-answers-btn" onclick="toggleAnswers()" class="bg-yellow-500 hover:bg-yellow-600 text-yellow-900 font-bold px-6 py-2 rounded-full text-lg shadow transition flex items-center">
+                    <i class="fa-solid fa-eye-slash mr-2"></i> Clear Pre-filled Answers
+                </button>
+            </div>
+
+            <button onclick="nextSlide()" class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded text-xl flex items-center transition">
+                Next <i class="fa-solid fa-chevron-right ml-3"></i>
+            </button>
+        </footer>
     </div>
-    <div style="display:flex;gap:1vmin;margin-top:2vmin;">
-      <span class="part-badge p1">Part 1</span>
-      <span class="part-badge p2">Part 2</span>
-      <span class="part-badge p3">Part 3</span>
-      <span class="part-badge p4">Part 4</span>
-      <span class="part-badge p5">Part 5</span>
-    </div>
-  </div>
-</div>
 
-<!-- Slide 2: Part 1 Intro + Q1 Dialogue -->
-<div class="slide" data-index="1">
-  <span class="part-badge p1">Part 1</span>
-  <span class="instruction" contenteditable="true">Questions 1 to 8 — Choose the best answer A, B or C.</span>
-  <h3 style="display:flex;align-items:center;gap:.6vmin;"><span class="q-num">1</span> Dialogue</h3>
-  <div class="grid-2" style="margin-top:.8vmin;">
-    <div class="card dialogue" contenteditable="true">
-      <div class="msg left"><div class="msg-name">Aisyah</div>Hi! I am Aisyah.</div>
-      <div class="msg right"><div class="msg-name">Linda</div>Hi! I am Linda.</div>
-      <div class="msg left"><div class="msg-name">Aisyah</div>Which class are you in?</div>
-      <div class="msg right"><div class="msg-name">Linda</div>I am in Form 1 Ibnu Sina.</div>
-      <div class="msg left"><div class="msg-name">Aisyah</div>Where do you live?</div>
-      <div class="msg right" style="opacity:.5"><div class="msg-name">Linda</div>?</div>
-    </div>
-    <div>
-      <p style="margin-bottom:.6vmin;" contenteditable="true">Which of the sentences below is a <strong>possible response</strong> to Aisyah's question?</p>
-      <div class="options" data-q="1" data-answer="C">
-        <div class="option" data-opt="A"><span class="option-letter">A</span><span contenteditable="true">She walks to school every day.</span></div>
-        <div class="option" data-opt="B"><span class="option-letter">B</span><span contenteditable="true">Her favourite food is Chicken Rice.</span></div>
-        <div class="option" data-opt="C"><span class="option-letter">C</span><span contenteditable="true">I live at No. 18, Jalan Sentosa, Masai Johor.</span></div>
-      </div>
-      <button class="reveal-btn" onclick="revealAnswer(this)">Reveal Answer</button>
-    </div>
-  </div>
-</div>
+    <!-- Interactivity Script -->
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const partIndicator = document.getElementById('part-indicator');
+        const slideCounter = document.getElementById('slide-counter');
+        
+        // Global State for Answers
+        let answersVisible = true; // By default, schema answers are loaded in the inputs
 
-<!-- Slide 3: Part 1 Q2-Q3 -->
-<div class="slide" data-index="2">
-  <span class="part-badge p1">Part 1</span>
-  <div class="grid-2">
-    <div class="card">
-      <h3 style="display:flex;align-items:center;gap:.6vmin;margin-bottom:.6vmin;"><span class="q-num">2</span> Protect Your Privacy</h3>
-      <p contenteditable="true">Be cautious about sharing personal information such as your address, phone number, and financial details. Use privacy settings to control who can see your posts and profile.</p>
-      <p style="margin-top:.6vmin;font-weight:600;" contenteditable="true">What is one way to control who can see your posts and profile?</p>
-      <div class="options" data-q="2" data-answer="C">
-        <div class="option" data-opt="A"><span class="option-letter">A</span><span contenteditable="true">Ignore friend requests</span></div>
-        <div class="option" data-opt="B"><span class="option-letter">B</span><span contenteditable="true">Share your password</span></div>
-        <div class="option" data-opt="C"><span class="option-letter">C</span><span contenteditable="true">Use privacy settings</span></div>
-      </div>
-      <button class="reveal-btn" onclick="revealAnswer(this)">Reveal Answer</button>
-    </div>
-    <div class="card">
-      <h3 style="display:flex;align-items:center;gap:.6vmin;margin-bottom:.6vmin;"><span class="q-num">3</span> Sports Event Invitation</h3>
-      <p contenteditable="true"><strong>Join us for the Annual Inter-School Sports Competition!</strong></p>
-      <p contenteditable="true" style="font-size:clamp(10px,1vmin,15px);color:var(--text2);">Date: October 25, 2024 &nbsp;|&nbsp; Time: 9:00 AM – 4:00 PM &nbsp;|&nbsp; Location: Ipoh Stadium</p>
-      <p contenteditable="true" style="margin-top:.4vmin;">Come and cheer for your favourite teams as they compete in various sports, including <strong>football, basketball, and track events</strong>.</p>
-      <p style="margin-top:.6vmin;font-weight:600;" contenteditable="true">Which sport is <strong>NOT</strong> mentioned?</p>
-      <div class="options" data-q="3" data-answer="B">
-        <div class="option" data-opt="A"><span class="option-letter">A</span><span contenteditable="true">Football</span></div>
-        <div class="option" data-opt="B"><span class="option-letter">B</span><span contenteditable="true">Volleyball</span></div>
-        <div class="option" data-opt="C"><span class="option-letter">C</span><span contenteditable="true">Basketball</span></div>
-      </div>
-      <button class="reveal-btn" onclick="revealAnswer(this)">Reveal Answer</button>
-    </div>
-  </div>
-</div>
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlideIndex) {
+                    slide.classList.add('active');
+                    partIndicator.innerText = slide.getAttribute('data-part');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            slideCounter.innerText = `${currentSlideIndex + 1} / ${slides.length}`;
+        }
 
-<!-- Slide 4: Part 1 Q4-Q5 -->
-<div class="slide" data-index="3">
-  <span class="part-badge p1">Part 1</span>
-  <div class="grid-2">
-    <div class="card">
-      <h3 style="display:flex;align-items:center;gap:.6vmin;margin-bottom:.6vmin;"><span class="q-num">4</span> Time Spent by Teenagers <small>(Hours)</small></h3>
-      <div class="bar-chart" contenteditable="true">
-        <div class="bar-row"><span class="bar-label">Talking to friends</span><span class="bar-track"><span class="bar-fill girls" style="width:95%"><span class="bar-val">Girls 38</span></span></span></div>
-        <div class="bar-row"><span class="bar-label"></span><span class="bar-track"><span class="bar-fill boys" style="width:90%"><span class="bar-val">Boys 36</span></span></span></div>
-        <div class="bar-row"><span class="bar-label">Sleeping</span><span class="bar-track"><span class="bar-fill girls" style="width:60%"><span class="bar-val">Girls 24</span></span></span></div>
-        <div class="bar-row"><span class="bar-label"></span><span class="bar-track"><span class="bar-fill boys" style="width:60%"><span class="bar-val">Boys 24</span></span></span></div>
-        <div class="bar-row"><span class="bar-label">Doing Homework</span><span class="bar-track"><span class="bar-fill girls" style="width:35%"><span class="bar-val">Girls 14</span></span></span></div>
-        <div class="bar-row"><span class="bar-label"></span><span class="bar-track"><span class="bar-fill boys" style="width:80%"><span class="bar-val">Boys 32</span></span></span></div>
-        <div class="bar-row"><span class="bar-label">Housework</span><span class="bar-track"><span class="bar-fill girls" style="width:65%"><span class="bar-val">Girls 26</span></span></span></div>
-        <div class="bar-row"><span class="bar-label"></span><span class="bar-track"><span class="bar-fill boys" style="width:15%"><span class="bar-val">Boys 6</span></span></span></div>
-      </div>
-      <p style="margin-top:.8vmin;font-weight:600;" contenteditable="true">From the data, we observe that:</p>
-      <div class="options" data-q="4" data-answer="B">
-        <div class="option" data-opt="A"><span class="option-letter">A</span><span contenteditable="true">Girls and boys spend the least time talking to friends.</span></div>
-        <div class="option" data-opt="B"><span class="option-letter">B</span><span contenteditable="true">Girls and boys spend the same amount of time sleeping.</span></div>
-        <div class="option" data-opt="C"><span class="option-letter">C</span><span contenteditable="true">Both spend more time on housework than homework.</span></div>
-      </div>
-      <button class="reveal-btn" onclick="revealAnswer(this)">Reveal Answer</button>
-    </div>
-    <div class="card">
-      <h3 style="display:flex;align-items:center;gap:.6vmin;margin-bottom:.6vmin;"><span class="q-num">5</span> Signage</h3>
-      <div class="sign" contenteditable="true">
-        <div class="do-section">
-          <div class="sign-head do">✔ DO</div>
-          <ul>
-            <li>BUY YOUR TICKETS EARLY</li>
-            <li>TURN OFF YOUR CELL PHONES</li>
-            <li>DRESS APPROPRIATELY</li>
-          </ul>
-        </div>
-        <div class="dont-section">
-          <div class="sign-head dont">✘ DON'T</div>
-          <ul>
-            <li>TALK LOUDLY</li>
-            <li>TOUCH THE THINGS ON DISPLAY</li>
-            <li>KEEP YOUR CAMERA FLASH ON</li>
-          </ul>
-        </div>
-      </div>
-      <p style="margin-top:.8vmin;font-weight:600;" contenteditable="true">You would most likely see this sign when visiting a:</p>
-      <div class="options" data-q="5" data-answer="B">
-        <div class="option" data-opt="A"><span class="option-letter">A</span><span contenteditable="true">Festival</span></div>
-        <div class="option" data-opt="B"><span class="option-letter">B</span><span contenteditable="true">Museum</span></div>
-        <div class="option" data-opt="C"><span class="option-letter">C</span><span contenteditable="true">Friend's house</span></div>
-      </div>
-      <button class="reveal-btn" onclick="revealAnswer(this)">Reveal Answer</button>
-    </div>
-  </div>
-</div>
+        function nextSlide() {
+            if (currentSlideIndex < slides.length - 1) {
+                currentSlideIndex++;
+                updateSlide();
+            }
+        }
 
-<!-- Slide 5: Part 1 Q6-Q8 -->
-<div class="slide" data-index="4">
-  <span class="part-badge p1">Part 1</span>
-  <div class="grid-3">
-    <div class="card">
-      <h3 style="display:flex;align-items:center;gap:.6vmin;margin-bottom:.6vmin;"><span class="q-num">6</span> Harmonica</h3>
-      <p contenteditable="true">Harmonica is probably the easiest instrument to play. It is inexpensive, sounds fantastic right from the start and is completely portable — carry it wherever you go. There are generally three basic types: Diatonic, Chromatic, and Tremolo.</p>
-      <p style="margin-top:.6vmin;font-weight:600;" contenteditable="true">Aidil is advised to learn Harmonica due to budget because it is:</p>
-      <div class="options" data-q="6" data-answer="A">
-        <div class="option" data-opt="A"><span class="option-letter">A</span><span contenteditable="true">Affordable and simple to learn</span></div>
-        <div class="option" data-opt="B"><span class="option-letter">B</span><span contenteditable="true">Portable with three basic types</span></div>
-        <div class="option" data-opt="C"><span class="option-letter">C</span><span contenteditable="true">Has a fantastic sound</span></div>
-      </div>
-      <button class="reveal-btn" onclick="revealAnswer(this)">Reveal Answer</button>
-    </div>
-    <div class="card">
-      <h3 style="display:flex;align-items:center;gap:.6vmin;margin-bottom:.6vmin;"><span class="q-num">7</span> Advertisement</h3>
-      <p contenteditable="true"><strong>Family Movie Night Just Got Better!</strong></p>
-      <p contenteditable="true">Gather the family for endless entertainment with our extensive library of kids' shows. Enjoy family-friendly options that everyone will love. Join Streamix today!</p>
-      <p style="margin-top:.6vmin;font-weight:600;" contenteditable="true">What type of content is highlighted?</p>
-      <div class="options" data-q="7" data-answer="C">
-        <div class="option" data-opt="A"><span class="option-letter">A</span><span contenteditable="true">Reality TV</span></div>
-        <div class="option" data-opt="B"><span class="option-letter">B</span><span contenteditable="true">Educational programs</span></div>
-        <div class="option" data-opt="C"><span class="option-letter">C</span><span contenteditable="true">Family-friendly shows</span></div>
-      </div>
-      <button class="reveal-btn" onclick="revealAnswer(this)">Reveal Answer</button>
-    </div>
-    <div class="card">
-      <h3 style="display:flex;align-items:center;gap:.6vmin;margin-bottom:.6vmin;"><span class="q-num">8</span> Hotel Selection</h3>
-      <p contenteditable="true" style="font-weight:600;">All priced at <span style="color:var(--amber)">RM 500</span></p>
-      <div class="grid-1" style="gap:.5vmin;">
-        <div class="hotel-card" data-hotel="A" onclick="selectHotel(this)">
-          <div class="hotel-name">Pertama Hotel</div>
-          <ul contenteditable="true"><li>Kids pool</li><li>Baby sitting</li><li>Grocery store</li></ul>
-        </div>
-        <div class="hotel-card" data-hotel="B" onclick="selectHotel(this)">
-          <div class="hotel-name">Great One Hotel</div>
-          <ul contenteditable="true"><li>Free Wi-Fi</li><li>Outdoor swimming pool</li><li>Fitness centre</li><li>All day free buffet</li><li>Free spa vouchers</li></ul>
-        </div>
-        <div class="hotel-card" data-hotel="C" onclick="selectHotel(this)">
-          <div class="hotel-name">Grand Horizon Hotel</div>
-          <ul contenteditable="true"><li>Wi-Fi @ RM 10/day</li><li>Gym</li><li>Buffet breakfast only</li><li>Family rooms</li></ul>
-        </div>
-      </div>
-      <p style="margin-top:.6vmin;font-weight:600;" contenteditable="true">Encik Ahmad needs a hotel with activities & spa. Which is suitable?</p>
-      <div class="options" data-q="8" data-answer="B">
-        <div class="option" data-opt="A"><span class="option-letter">A</span><span contenteditable="true">Pertama Hotel</span></div>
-        <div class="option" data-opt="B"><span class="option-letter">B</span><span contenteditable="true">Great One Hotel</span></div>
-        <div class="option" data-opt="C"><span class="option-letter">C</span><span contenteditable="true">Grand Horizon Hotel</span></div>
-      </div>
-      <button class="reveal-btn" onclick="revealAnswer(this)">Reveal Answer</button>
-    </div>
-  </div>
-</div>
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                updateSlide();
+            }
+        }
 
-<!-- Slide 6: Part 2 - Being a Teenager (Q9-16) -->
-<div class="slide" data-index="5">
-  <span class="part-badge p2">Part 2</span>
-  <span class="instruction" contenteditable="true">Questions 9 to 16 — Read the text and correct the underlined errors. Write the correct word.</span>
-  <div class="grid-60-40" style="flex:1;min-height:0;">
-    <div class="card" style="overflow-y:auto;" contenteditable="true">
-      <h4 style="margin-bottom:.8vmin;">BEING A TEENAGER</h4>
-      <p>Being a teenager is a phase filled with so <strong>(0) many</strong> emotions, experiences, and challenges. It is a time when we are <strong>(9) <span class="editable-field" contenteditable="true">transitioned</span></strong> from childhood to adulthood, trying to find our place in the world and figuring out who we are as individuals.</p>
-      <p style="margin-top:.6vmin;">In my childhood, I was a happy-go-lucky kid. I constantly <strong>(10) <span class="editable-field" contenteditable="true">plays</span></strong> with friends without any worries about anything. During my teenage years, I went through changes — physically, mentally, and most of all emotionally. The changes I was going through <strong>(11) <span class="editable-field" contenteditable="true">make</span></strong> me a better person.</p>
-      <p style="margin-top:.6vmin;">As a teenager, I gained a lot of freedom. I <strong>(12) <span class="editable-field" contenteditable="true">am</span></strong> creating good memories that I treasure in my adult life. I was able to stay up longer during the weekends and went to the movies with my friends. The freedom that my parents gave me, <strong>(13) <span class="editable-field" contenteditable="true">comes</span></strong> with greater responsibilities. I understood the value of trust that my parents had entrusted me with. How <strong>(14) <span class="editable-field" contenteditable="true">does</span></strong> I survive?</p>
-      <p style="margin-top:.6vmin;">It wasn't smooth sailing. I had my equal share of problems. Despite that, I <strong>(15) <span class="editable-field" contenteditable="true">considering</span></strong> my teenage life as the best years of my life and wish it <strong>(16) <span class="editable-field" contenteditable="true">don't</span></strong> end.</p>
-    </div>
-    <div class="card">
-      <h4 style="margin-bottom:.8vmin;">Your Corrections</h4>
-      <table>
-        <tr><th>Q</th><th>Error</th><th>Correct Word</th></tr>
-        <tr><td>9</td><td>transitioned</td><td><span class="editable-field" contenteditable="true" data-qnum="9" data-answer="transitioning">________</span></td></tr>
-        <tr><td>10</td><td>plays</td><td><span class="editable-field" contenteditable="true" data-qnum="10" data-answer="played">________</span></td></tr>
-        <tr><td>11</td><td>make</td><td><span class="editable-field" contenteditable="true" data-qnum="11" data-answer="made">________</span></td></tr>
-        <tr><td>12</td><td>am</td><td><span class="editable-field" contenteditable="true" data-qnum="12" data-answer="was">________</span></td></tr>
-        <tr><td>13</td><td>comes</td><td><span class="editable-field" contenteditable="true" data-qnum="13" data-answer="came">________</span></td></tr>
-        <tr><td>14</td><td>does</td><td><span class="editable-field" contenteditable="true" data-qnum="14" data-answer="did">________</span></td></tr>
-        <tr><td>15</td><td>considering</td><td><span class="editable-field" contenteditable="true" data-qnum="15" data-answer="consider">________</span></td></tr>
-        <tr><td>16</td><td>don't</td><td><span class="editable-field" contenteditable="true" data-qnum="16" data-answer="didn't">________</span></td></tr>
-      </table>
-      <button class="reveal-btn" style="margin-top:1vmin;" onclick="revealPart2(this)">Reveal All Answers</button>
-    </div>
-  </div>
-</div>
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
 
-<!-- Slide 7: Part 3 - Cultural Festivals (Q17-24) -->
-<div class="slide" data-index="6">
-  <span class="part-badge p3">Part 3</span>
-  <span class="instruction" contenteditable="true">Questions 17 to 24 — Read the text and complete the table. No more than 5 words / a number from the text.</span>
-  <div class="grid-60-40" style="flex:1;min-height:0;">
-    <div class="card" style="overflow-y:auto;" contenteditable="true">
-      <h4 style="margin-bottom:.6vmin;">Cultural Festivals</h4>
-      <p>A cultural festival is an event that celebrates the <strong>cultural heritage and traditions</strong> of a particular community or region. These festivals typically include <strong>traditional music, dance and food</strong>. Some well-known cultural festivals include <strong>Oktoberfest</strong> in Germany, Carnival in Brazil, Diwali in India, and Chinese New Year in China.</p>
-      <p style="margin-top:.5vmin;">Attending cultural festivals is a great way to gain a deeper understanding of the <strong>different cultures</strong> and learn about <strong>their way of life</strong>. When attending cultural festivals in different countries, it is important to be respectful of local customs and traditions. Dress appropriately for the occasion, be mindful of cultural norms around personal space and physical contact, and always ask for permission before taking photos or videos.</p>
-      <p style="margin-top:.5vmin;">There are several resources you can use to find information about cultural festivals in different countries. Travel guidebooks, online travel forums, and local tourism boards are all great sources of information. You can also search for specific festivals online or through social media, or <strong>ask locals</strong> for recommendations when you arrive at a new destination.</p>
-    </div>
-    <div class="card">
-      <h4 style="margin-bottom:.8vmin;">Complete the Table</h4>
-      <table>
-        <tr><th>Category</th><th>Details</th></tr>
-        <tr><td>Meaning of cultural festival</td><td>17. <span class="editable-field" contenteditable="true" data-qnum="17" data-answer="cultural heritage and traditions">______________</span></td></tr>
-        <tr><td>3 elements in every festival</td><td>18. <span class="editable-field" contenteditable="true" data-qnum="18" data-answer="traditional music">______________</span></td></tr>
-        <tr><td></td><td>19. <span class="editable-field" contenteditable="true" data-qnum="19" data-answer="dance">______________</span></td></tr>
-        <tr><td></td><td>20. <span class="editable-field" contenteditable="true" data-qnum="20" data-answer="food">______________</span></td></tr>
-        <tr><td>Festival in Germany</td><td>21. <span class="editable-field" contenteditable="true" data-qnum="21" data-answer="Oktoberfest">______________</span></td></tr>
-        <tr><td>Benefits of attending</td><td>22. <span class="editable-field" contenteditable="true" data-qnum="22" data-answer="different cultures">______________</span></td></tr>
-        <tr><td></td><td>23. <span class="editable-field" contenteditable="true" data-qnum="23" data-answer="their way of life">______________</span></td></tr>
-        <tr><td>Way to get info when in country</td><td>24. <span class="editable-field" contenteditable="true" data-qnum="24" data-answer="ask locals">______________</span></td></tr>
-      </table>
-      <button class="reveal-btn" style="margin-top:1vmin;" onclick="revealPart3(this)">Reveal All Answers</button>
-    </div>
-  </div>
-</div>
+        // MCQ Check Logic
+        function checkMCQ(btn) {
+            // Find parent container
+            const container = btn.closest('.mcq-container');
+            // Clear previous selections
+            container.querySelectorAll('.mcq-btn').forEach(b => {
+                b.classList.remove('bg-green-500', 'text-white', 'border-green-600', 'bg-red-500', 'border-red-600', 'bg-white');
+                b.classList.add('bg-white');
+            });
 
-<!-- Slide 8: Part 4 - Cancun Museum (Q25-32) -->
-<div class="slide" data-index="7">
-  <span class="part-badge p4">Part 4</span>
-  <span class="instruction" contenteditable="true">Questions 25 to 32 — Read the text and answer. True/False (25-28) and short answers (29-32).</span>
-  <div class="grid-60-40" style="flex:1;min-height:0;">
-    <div class="card" style="overflow-y:auto;" contenteditable="true">
-      <h4 style="margin-bottom:.6vmin;">Cancun Underwater Museum of Art, Mexico</h4>
-      <p>The Cancun Underwater Museum or <strong>Museo Subacuático de Arte (M.U.S.A.)</strong> in Mexico prides itself as being the <strong>biggest underwater museum</strong> in the world. MUSA is an innovative project designed to counteract the effects of climate change on our oceans and reef systems.</p>
-      <p style="margin-top:.5vmin;">Located near the island of <strong>Isla Mujeres</strong> and the coast of Punta Nizuc in Cancún off the coast of Mexico, the underwater museum features over <strong>500 permanent life-size sculptures</strong> created by <strong>British</strong> sculptor Jason deCaires Taylor. It was formally opened to the public on <strong>November 26, 2010</strong>.</p>
-      <p style="margin-top:.5vmin;">The museum is divided into two galleries. <strong>Salon Machones</strong> is <strong>eight metres</strong> deep and suitable for both divers and snorkelers. <strong>Salon Nizuc</strong> is <strong>four metres</strong> deep and only permitted for snorkelling. Cancún Marine Park is one of the most visited stretches of water in the world. It receives over 750,000 visitors a year, which places immense pressure on its natural resources. Visitors to the marine park now divide their time between <strong>the museum and the natural reef</strong>, providing significant rest for natural overstressed areas.</p>
-    </div>
-    <div class="card">
-      <h4 style="margin-bottom:.4vmin;">True or False (Q25–28)</h4>
-      <table>
-        <tr><th>#</th><th>Statement</th><th>Answer</th></tr>
-        <tr><td>25</td><td contenteditable="true">M.U.S.A. is the acronym for Cancun Underwater Museum.</td><td><span class="tag" data-qnum="25" data-answer="True" onclick="toggleTF(this)" style="cursor:pointer;">Click</span></td></tr>
-        <tr><td>26</td><td contenteditable="true">The museum is located within Mexico City Island.</td><td><span class="tag" data-qnum="26" data-answer="False" onclick="toggleTF(this)" style="cursor:pointer;">Click</span></td></tr>
-        <tr><td>27</td><td contenteditable="true">There are 500 life size sculptures on display.</td><td><span class="tag" data-qnum="27" data-answer="True" onclick="toggleTF(this)" style="cursor:pointer;">Click</span></td></tr>
-        <tr><td>28</td><td contenteditable="true">Salon Machones is 4 metres deep, suitable for divers & snorkelers.</td><td><span class="tag" data-qnum="28" data-answer="False" onclick="toggleTF(this)" style="cursor:pointer;">Click</span></td></tr>
-      </table>
-      <h4 style="margin-top:1vmin;margin-bottom:.4vmin;">Short Answers (Q29–32)</h4>
-      <p style="font-size:clamp(10px,1vmin,15px);color:var(--text2);">No more than 5 words / a number.</p>
-      <table>
-        <tr><th>#</th><th>Question</th><th>Answer</th></tr>
-        <tr><td>29</td><td contenteditable="true">M.U.S.A. is the world's _____</td><td><span class="editable-field" contenteditable="true" data-qnum="29" data-answer="biggest underwater museum">________</span></td></tr>
-        <tr><td>30</td><td contenteditable="true">Nationality of Jason deCaires Taylor</td><td><span class="editable-field" contenteditable="true" data-qnum="30" data-answer="British">________</span></td></tr>
-        <tr><td>31</td><td contenteditable="true">Date first opened to public</td><td><span class="editable-field" contenteditable="true" data-qnum="31" data-answer="November 26, 2010">________</span></td></tr>
-        <tr><td>32</td><td contenteditable="true">What provides rest for overstressed reef?</td><td><span class="editable-field" contenteditable="true" data-qnum="32" data-answer="the museum and the natural reef">________</span></td></tr>
-      </table>
-      <button class="reveal-btn" style="margin-top:1vmin;" onclick="revealPart4(this)">Reveal All Answers</button>
-    </div>
-  </div>
-</div>
+            const isCorrect = btn.getAttribute('data-correct') === 'true';
+            
+            btn.classList.remove('bg-white');
+            if (isCorrect) {
+                btn.classList.add('bg-green-500', 'text-white', 'border-green-600');
+            } else {
+                btn.classList.add('bg-red-500', 'text-white', 'border-red-600');
+                
+                // Optionally highlight the correct answer so students can see it
+                const correctBtn = container.querySelector('[data-correct="true"]');
+                correctBtn.classList.remove('bg-white');
+                correctBtn.classList.add('bg-green-500', 'text-white', 'border-green-600');
+            }
+        }
 
-<!-- Slide 9: Part 5 - Jordan Romero (Q33-36) -->
-<div class="slide" data-index="8">
-  <span class="part-badge p5">Part 5</span>
-  <span class="instruction" contenteditable="true">Questions 33 to 36 — Choose the correct sentence (A–D) to fill each gap.</span>
-  <div class="grid-60-40" style="flex:1;min-height:0;">
-    <div class="card" style="overflow-y:auto;">
-      <h4 style="margin-bottom:.8vmin;">Jordan Romero — Mountain Climber</h4>
-      <p contenteditable="true">Jordan Romero is an American mountain climber. At the age of 9, he made it his lifelong goal to conquer all of the seven peaks. <span class="gap-slot" data-gap="33" data-answer="C" onclick="selectGap(this)">(33) ____</span> He started his mountain climbing journey by training non-stop when he was 9 years old. <span class="gap-slot" data-gap="34" data-answer="A" onclick="selectGap(this)">(34) ____</span> He then set his sight at conquering Mount Everest.</p>
-      <p style="margin-top:.5vmin;" contenteditable="true">At just 13 years old, Jordan reached the peak of Mount Everest. This made him the youngest person to arrive at the summit. In December 2011, he reached another milestone achievement. <span class="gap-slot" data-gap="35" data-answer="D" onclick="selectGap(this)">(35) ____</span> Jordan then went on to write a book, 'No Summit Out of Sight'. In this book, he shared his experiences of preparing for the climbs and the dangers and thrills of the ascents. <span class="gap-slot" data-gap="36" data-answer="B" onclick="selectGap(this)">(36) ____</span></p>
-    </div>
-    <div class="card">
-      <h4 style="margin-bottom:.6vmin;">Sentence Bank</h4>
-      <p style="font-size:clamp(10px,.9vmin,14px);color:var(--text2);margin-bottom:.6vmin;">Click a gap in the passage, then click a sentence to fill it.</p>
-      <div class="sentence-bank" id="jordan-bank">
-        <div class="sentence-chip" data-letter="A" onclick="fillGapSentence(this,'jordan')">A. After a year of setting his mind on conquering all seven mountains, Jordan started his adventures by climbing the dormant volcano, Mount Kilimanjaro.</div>
-        <div class="sentence-chip" data-letter="B" onclick="fillGapSentence(this,'jordan')">B. He even included about the physical and emotional endurance needed for his goals.</div>
-        <div class="sentence-chip" data-letter="C" onclick="fillGapSentence(this,'jordan')">C. At Jordan's age, not many children have such ambition.</div>
-        <div class="sentence-chip" data-letter="D" onclick="fillGapSentence(this,'jordan')">D. He became the youngest person to conquer most of the peaks of the Seven Summits.</div>
-      </div>
-      <div style="margin-top:1vmin;">
-        <p style="font-size:clamp(10px,1vmin,15px);font-weight:600;margin-bottom:.3vmin;">Your answers:</p>
-        <p style="font-size:clamp(10px,1vmin,15px);">33: <span class="editable-field" contenteditable="true" data-qnum="33" data-answer="C">__</span></p>
-        <p style="font-size:clamp(10px,1vmin,15px);">34: <span class="editable-field" contenteditable="true" data-qnum="34" data-answer="A">__</span></p>
-        <p style="font-size:clamp(10px,1vmin,15px);">35: <span class="editable-field" contenteditable="true" data-qnum="35" data-answer="D">__</span></p>
-        <p style="font-size:clamp(10px,1vmin,15px);">36: <span class="editable-field" contenteditable="true" data-qnum="36" data-answer="B">__</span></p>
-      </div>
-      <button class="reveal-btn" style="margin-top:1vmin;" onclick="revealPart5a(this)">Reveal Answers</button>
-    </div>
-  </div>
-</div>
+        // Toggle Answers Logic
+        function toggleAnswers() {
+            answersVisible = !answersVisible;
+            const btn = document.getElementById('toggle-answers-btn');
+            
+            if (answersVisible) {
+                btn.innerHTML = '<i class="fa-solid fa-eye-slash mr-2"></i> Clear Pre-filled Answers';
+                btn.classList.remove('bg-green-500', 'hover:bg-green-600', 'text-white');
+                btn.classList.add('bg-yellow-500', 'hover:bg-yellow-600', 'text-yellow-900');
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-eye mr-2"></i> Reveal Schema Answers';
+                btn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600', 'text-yellow-900');
+                btn.classList.add('bg-green-500', 'hover:bg-green-600', 'text-white');
+            }
 
-<!-- Slide 10: Part 5 - Talent Search (Q37-40) -->
-<div class="slide" data-index="9">
-  <span class="part-badge p5">Part 5</span>
-  <span class="instruction" contenteditable="true">Questions 37 to 40 — Choose the correct sentence (A–D) to fill each gap.</span>
-  <div class="grid-60-40" style="flex:1;min-height:0;">
-    <div class="card" style="overflow-y:auto;">
-      <h4 style="margin-bottom:.8vmin;">Talent Search</h4>
-      <p contenteditable="true">This year the class of Form 1 Smart decided to do a project which would be educational and fun at the same time. We came up with the idea of making a talent show. <span class="gap-slot" data-gap="37" data-answer="D" onclick="selectGap(this)">(37) ____</span> She gave us a task which was to find our talent. Some of us already had some. But others discovered their hidden talents.</p>
-      <p style="margin-top:.5vmin;" contenteditable="true">The first thing that we needed to do was write our script. It was pretty hard for some of us and some even decided to use that time to discuss about other stuff. Because of that, the show was almost cancelled. <span class="gap-slot" data-gap="38" data-answer="B" onclick="selectGap(this)">(38) ____</span> After the June Holiday we all came back motivated as ever and started working very hard. We started to do proper rehearsals and each one was better than the other.</p>
-      <p style="margin-top:.5vmin;" contenteditable="true">Then came the day of the final rehearsal. We all brought our stuff and costumes. And we started to work. At the beginning nobody came to watch but then people from activity groups came to assist in the rehearsals. They thought we were great. <span class="gap-slot" data-gap="39" data-answer="C" onclick="selectGap(this)">(39) ____</span> A few days later came the D-day and it was a success. More than sixty people attended our show including teachers, parents and other children. Personally, I felt great. <span class="gap-slot" data-gap="40" data-answer="A" onclick="selectGap(this)">(40) ____</span> All in all, we had an amazing experience.</p>
-    </div>
-    <div class="card">
-      <h4 style="margin-bottom:.6vmin;">Sentence Bank</h4>
-      <p style="font-size:clamp(10px,.9vmin,14px);color:var(--text2);margin-bottom:.6vmin;">Click a gap in the passage, then click a sentence to fill it.</p>
-      <div class="sentence-bank" id="talent-bank">
-        <div class="sentence-chip" data-letter="A" onclick="fillGapSentence(this,'talent')">A. At the end of the show, the school headmaster came to us and told us it was such an amazing performance.</div>
-        <div class="sentence-chip" data-letter="B" onclick="fillGapSentence(this,'talent')">B. Our teacher, Madam Maslina advised us and not to give up.</div>
-        <div class="sentence-chip" data-letter="C" onclick="fillGapSentence(this,'talent')">C. The compliments boosted our confidence.</div>
-        <div class="sentence-chip" data-letter="D" onclick="fillGapSentence(this,'talent')">D. First our English teacher introduced us to the idea and everyone accepted it.</div>
-      </div>
-      <div style="margin-top:1vmin;">
-        <p style="font-size:clamp(10px,1vmin,15px);font-weight:600;margin-bottom:.3vmin;">Your answers:</p>
-        <p style="font-size:clamp(10px,1vmin,15px);">37: <span class="editable-field" contenteditable="true" data-qnum="37" data-answer="D">__</span></p>
-        <p style="font-size:clamp(10px,1vmin,15px);">38: <span class="editable-field" contenteditable="true" data-qnum="38" data-answer="B">__</span></p>
-        <p style="font-size:clamp(10px,1vmin,15px);">39: <span class="editable-field" contenteditable="true" data-qnum="39" data-answer="C">__</span></p>
-        <p style="font-size:clamp(10px,1vmin,15px);">40: <span class="editable-field" contenteditable="true" data-qnum="40" data-answer="A">__</span></p>
-      </div>
-      <button class="reveal-btn" style="margin-top:1vmin;" onclick="revealPart5b(this)">Reveal Answers</button>
-    </div>
-  </div>
-</div>
+            // Text Inputs
+            document.querySelectorAll('.answer-input').forEach(input => {
+                if (answersVisible) {
+                    input.value = input.getAttribute('data-answer');
+                } else {
+                    input.value = '';
+                }
+            });
 
-<!-- Slide 11: ANSWER KEY (Penultimate) -->
-<div class="slide" data-index="10">
-  <span class="part-badge p4">Answer Key</span>
-  <h2 style="margin-bottom:1vmin;">All Answers — Form 1 English Paper 1</h2>
-  <div class="answer-grid">
-    <div class="answer-part">
-      <h4 style="color:var(--accent);">Part 1</h4>
-      <div class="answer-row"><span>1. Dialogue</span><span class="ans" contenteditable="true">C</span></div>
-      <div class="answer-row"><span>2. Privacy</span><span class="ans" contenteditable="true">C</span></div>
-      <div class="answer-row"><span>3. Sports</span><span class="ans" contenteditable="true">B</span></div>
-      <div class="answer-row"><span>4. Graphs</span><span class="ans" contenteditable="true">B</span></div>
-      <div class="answer-row"><span>5. Signage</span><span class="ans" contenteditable="true">B</span></div>
-      <div class="answer-row"><span>6. Harmonica</span><span class="ans" contenteditable="true">A</span></div>
-      <div class="answer-row"><span>7. Advertisement</span><span class="ans" contenteditable="true">C</span></div>
-      <div class="answer-row"><span>8. Hotel</span><span class="ans" contenteditable="true">B</span></div>
-    </div>
-    <div class="answer-part">
-      <h4 style="color:var(--accent2);">Part 2</h4>
-      <div class="answer-row"><span>9. transitioned →</span><span class="ans" contenteditable="true">transitioning</span></div>
-      <div class="answer-row"><span>10. plays →</span><span class="ans" contenteditable="true">played</span></div>
-      <div class="answer-row"><span>11. make →</span><span class="ans" contenteditable="true">made</span></div>
-      <div class="answer-row"><span>12. am →</span><span class="ans" contenteditable="true">was</span></div>
-      <div class="answer-row"><span>13. comes →</span><span class="ans" contenteditable="true">came</span></div>
-      <div class="answer-row"><span>14. does →</span><span class="ans" contenteditable="true">did</span></div>
-      <div class="answer-row"><span>15. considering →</span><span class="ans" contenteditable="true">consider</span></div>
-      <div class="answer-row"><span>16. don't →</span><span class="ans" contenteditable="true">didn't</span></div>
-    </div>
-    <div class="answer-part">
-      <h4 style="color:var(--pink);">Part 3</h4>
-      <div class="answer-row"><span>17. Meaning</span><span class="ans" contenteditable="true">cultural heritage and traditions</span></div>
-      <div class="answer-row"><span>18. Element 1</span><span class="ans" contenteditable="true">traditional music</span></div>
-      <div class="answer-row"><span>19. Element 2</span><span class="ans" contenteditable="true">dance</span></div>
-      <div class="answer-row"><span>20. Element 3</span><span class="ans" contenteditable="true">food</span></div>
-      <div class="answer-row"><span>21. Germany</span><span class="ans" contenteditable="true">Oktoberfest</span></div>
-      <div class="answer-row"><span>22. Benefit 1</span><span class="ans" contenteditable="true">different cultures</span></div>
-      <div class="answer-row"><span>23. Benefit 2</span><span class="ans" contenteditable="true">their way of life</span></div>
-      <div class="answer-row"><span>24. Info source</span><span class="ans" contenteditable="true">ask locals</span></div>
-    </div>
-    <div class="answer-part">
-      <h4 style="color:var(--green);">Part 4</h4>
-      <div class="answer-row"><span>25. T/F</span><span class="ans" contenteditable="true">True</span></div>
-      <div class="answer-row"><span>26. T/F</span><span class="ans" contenteditable="true">False</span></div>
-      <div class="answer-row"><span>27. T/F</span><span class="ans" contenteditable="true">True</span></div>
-      <div class="answer-row"><span>28. T/F</span><span class="ans" contenteditable="true">False</span></div>
-      <div class="answer-row"><span>29. World's</span><span class="ans" contenteditable="true">biggest underwater museum</span></div>
-      <div class="answer-row"><span>30. Nationality</span><span class="ans" contenteditable="true">British</span></div>
-      <div class="answer-row"><span>31. Opened</span><span class="ans" contenteditable="true">November 26, 2010</span></div>
-      <div class="answer-row"><span>32. Rest by</span><span class="ans" contenteditable="true">the museum and natural reef</span></div>
-    </div>
-    <div class="answer-part" style="grid-column: span 2;">
-      <h4 style="color:var(--amber);">Part 5 — Gap Fill</h4>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6vmin;">
-        <div>
-          <p style="font-weight:600;font-size:clamp(10px,1vmin,15px);margin-bottom:.3vmin;">Jordan Romero</p>
-          <div class="answer-row"><span>33.</span><span class="ans" contenteditable="true">C</span></div>
-          <div class="answer-row"><span>34.</span><span class="ans" contenteditable="true">A</span></div>
-          <div class="answer-row"><span>35.</span><span class="ans" contenteditable="true">D</span></div>
-          <div class="answer-row"><span>36.</span><span class="ans" contenteditable="true">B</span></div>
-        </div>
-        <div>
-          <p style="font-weight:600;font-size:clamp(10px,1vmin,15px);margin-bottom:.3vmin;">Talent Search</p>
-          <div class="answer-row"><span>37.</span><span class="ans" contenteditable="true">D</span></div>
-          <div class="answer-row"><span>38.</span><span class="ans" contenteditable="true">B</span></div>
-          <div class="answer-row"><span>39.</span><span class="ans" contenteditable="true">C</span></div>
-          <div class="answer-row"><span>40.</span><span class="ans" contenteditable="true">A</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+            // Select Dropdowns
+            document.querySelectorAll('.answer-select').forEach(select => {
+                if (answersVisible) {
+                    select.value = select.getAttribute('data-answer');
+                } else {
+                    select.value = '';
+                }
+            });
 
-<!-- Slide 12: End Slide -->
-<div class="slide" data-index="11">
-  <div class="end-slide" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    <h1 contenteditable="true" style="font-size:clamp(24px,4vmin,60px);">Good Luck!</h1>
-    <p class="subtitle" style="margin-top:1vmin;" contenteditable="true">You are ready for the exam. Review the answer key on the previous slide.</p>
-    <p class="subtitle" style="margin-top:2vmin;font-size:clamp(12px,1.3vmin,18px);color:var(--text2);" contenteditable="true">Form 1 English Paper 1 — Parts 1 to 5</p>
-    <div style="margin-top:2vmin;display:flex;gap:1vmin;">
-      <span class="part-badge p1">Part 1</span>
-      <span class="part-badge p2">Part 2</span>
-      <span class="part-badge p3">Part 3</span>
-      <span class="part-badge p4">Part 4</span>
-      <span class="part-badge p5">Part 5</span>
-    </div>
-  </div>
-</div>
+            // Reset MCQs
+            if (!answersVisible) {
+                document.querySelectorAll('.mcq-btn').forEach(btn => {
+                    btn.classList.remove('bg-green-500', 'text-white', 'border-green-600', 'bg-red-500', 'border-red-600');
+                    btn.classList.add('bg-white');
+                });
+            }
+        }
 
-<!-- Navigation -->
-<button id="nav-left" onclick="goSlide(-1)" title="Previous">◀</button>
-<button id="nav-right" onclick="goSlide(1)" title="Next">▶</button>
-
-<!-- Top bar -->
-<div id="topbar">
-  <span id="slide-num">1 / 12</span>
-  <button id="fs-btn" onclick="toggleFS()" title="Toggle Fullscreen">⛶ Fullscreen</button>
-</div>
-
-<!-- Footer -->
-<div id="footer">Mr. A's Class</div>
-
-<!-- Dots -->
-<div id="dots"></div>
-
-</div>
-</div>
-
-<script>
-// ── State ──
-let currentSlide = 0;
-const totalSlides = document.querySelectorAll('.slide').length;
-const slides = document.querySelectorAll('.slide');
-
-// ── Navigation ──
-function goSlide(dir) {
-  slides[currentSlide].classList.remove('active');
-  currentSlide = (currentSlide + dir + totalSlides) % totalSlides;
-  slides[currentSlide].classList.add('active');
-  updateDots();
-  document.getElementById('slide-num').textContent = `${currentSlide + 1} / ${totalSlides}`;
-}
-
-function goToSlide(idx) {
-  slides[currentSlide].classList.remove('active');
-  currentSlide = idx;
-  slides[currentSlide].classList.add('active');
-  updateDots();
-  document.getElementById('slide-num').textContent = `${currentSlide + 1} / ${totalSlides}`;
-}
-
-// ── Dots ──
-function renderDots() {
-  const dots = document.getElementById('dots');
-  dots.innerHTML = '';
-  for (let i = 0; i < totalSlides; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.onclick = () => goToSlide(i);
-    dots.appendChild(dot);
-  }
-}
-function updateDots() {
-  document.querySelectorAll('.dot').forEach((d, i) => {
-    d.classList.toggle('active', i === currentSlide);
-  });
-}
-renderDots();
-
-// ── Keyboard ──
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
-    e.preventDefault();
-    goSlide(1);
-  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-    e.preventDefault();
-    goSlide(-1);
-  } else if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
-  else if (e.key === 'End') { e.preventDefault(); goToSlide(totalSlides - 1); }
-  else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); toggleFS(); }
-});
-
-// ── Option click ──
-document.querySelectorAll('.option').forEach(opt => {
-  opt.addEventListener('click', function() {
-    const parent = this.parentElement;
-    if (!parent.classList.contains('options')) return;
-    parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-    this.classList.add('selected');
-  });
-});
-
-// ── Reveal Answer for Part 1 ──
-function revealAnswer(btn) {
-  const optionsDiv = btn.parentElement.querySelector('.options');
-  if (!optionsDiv) return;
-  const answer = optionsDiv.dataset.answer;
-  const allOpts = optionsDiv.querySelectorAll('.option');
-  const isRevealed = btn.classList.contains('shown');
-
-  if (isRevealed) {
-    allOpts.forEach(o => { o.classList.remove('correct', 'wrong'); });
-    btn.classList.remove('shown');
-    btn.textContent = 'Reveal Answer';
-  } else {
-    allOpts.forEach(o => {
-      o.classList.remove('selected');
-      if (o.dataset.opt === answer) o.classList.add('correct');
-      else o.classList.add('wrong');
-    });
-    btn.classList.add('shown');
-    btn.textContent = 'Hide Answer';
-  }
-}
-
-// ── Reveal Part 2 answers ──
-function revealPart2(btn) {
-  const isRevealed = btn.classList.contains('shown');
-  btn.parentElement.querySelectorAll('.editable-field[data-qnum]').forEach(field => {
-    if (!isRevealed) field.textContent = field.dataset.answer;
-    else field.textContent = '________';
-  });
-  btn.classList.toggle('shown');
-  btn.textContent = isRevealed ? 'Reveal All Answers' : 'Hide Answers';
-}
-
-// ── Reveal Part 3 answers ──
-function revealPart3(btn) {
-  const isRevealed = btn.classList.contains('shown');
-  btn.parentElement.querySelectorAll('.editable-field[data-qnum]').forEach(field => {
-    if (!isRevealed) field.textContent = field.dataset.answer;
-    else field.textContent = '______________';
-  });
-  btn.classList.toggle('shown');
-  btn.textContent = isRevealed ? 'Reveal All Answers' : 'Hide Answers';
-}
-
-// ── Reveal Part 4 answers ──
-function revealPart4(btn) {
-  const isRevealed = btn.classList.contains('shown');
-  const card = btn.parentElement;
-
-  // T/F tags
-  card.querySelectorAll('.tag[data-qnum]').forEach(tag => {
-    if (!isRevealed) {
-      tag.textContent = tag.dataset.answer;
-      tag.className = 'tag ' + (tag.dataset.answer === 'True' ? 't' : 'f');
-    } else {
-      tag.textContent = 'Click';
-      tag.className = 'tag';
-    }
-  });
-
-  // Short answer fields
-  card.querySelectorAll('.editable-field[data-qnum]').forEach(field => {
-    if (!isRevealed) field.textContent = field.dataset.answer;
-    else field.textContent = '________';
-  });
-
-  btn.classList.toggle('shown');
-  btn.textContent = isRevealed ? 'Reveal All Answers' : 'Hide Answers';
-}
-
-// ── T/F Toggle ──
-function toggleTF(el) {
-  const current = el.textContent.trim();
-  if (current === 'True') { el.textContent = 'False'; el.className = 'tag f'; }
-  else if (current === 'False') { el.className = 'tag'; el.textContent = 'Click'; }
-  else { el.textContent = 'True'; el.className = 'tag t'; }
-}
-
-// ── Gap Fill ──
-let activeGap = null;
-
-function selectGap(el) {
-  document.querySelectorAll('.gap-slot').forEach(g => g.classList.remove('active'));
-  if (activeGap === el) { activeGap = null; return; }
-  activeGap = el;
-  el.classList.add('active');
-}
-
-function fillGapSentence(chip, bankId) {
-  if (!activeGap) return;
-  const letter = chip.dataset.letter;
-
-  // If this gap already has content, unmark the old chip
-  const oldLetter = activeGap.dataset.filled;
-  if (oldLetter) {
-    const oldChip = document.querySelector(`#${bankId}-bank .sentence-chip[data-letter="${oldLetter}"]`);
-    if (oldChip) oldChip.classList.remove('used');
-  }
-
-  activeGap.textContent = `(${activeGap.dataset.gap}) ${letter}`;
-  activeGap.classList.add('filled');
-  activeGap.dataset.filled = letter;
-  chip.classList.add('used');
-
-  // Also update the editable answer field
-  const qnum = activeGap.dataset.gap;
-  const ansField = document.querySelector(`.editable-field[data-qnum="${qnum}"]`);
-  if (ansField) ansField.textContent = letter;
-
-  activeGap.classList.remove('active');
-  activeGap = null;
-}
-
-// ── Reveal Part 5a (Jordan) ──
-function revealPart5a(btn) {
-  const isRevealed = btn.classList.contains('shown');
-  const slide = btn.closest('.slide');
-
-  slide.querySelectorAll('.gap-slot').forEach(gap => {
-    if (!isRevealed) {
-      gap.textContent = `(${gap.dataset.gap}) ${gap.dataset.answer}`;
-      gap.classList.add('filled');
-    } else {
-      gap.textContent = `(${gap.dataset.gap}) ____`;
-      gap.classList.remove('filled');
-      gap.dataset.filled = '';
-    }
-  });
-
-  slide.querySelectorAll('.editable-field[data-qnum]').forEach(field => {
-    if (!isRevealed) field.textContent = field.dataset.answer;
-    else field.textContent = '__';
-  });
-
-  slide.querySelectorAll('.sentence-chip').forEach(c => c.classList.remove('used'));
-
-  btn.classList.toggle('shown');
-  btn.textContent = isRevealed ? 'Reveal Answers' : 'Hide Answers';
-}
-
-// ── Reveal Part 5b (Talent) ──
-function revealPart5b(btn) {
-  const isRevealed = btn.classList.contains('shown');
-  const slide = btn.closest('.slide');
-
-  slide.querySelectorAll('.gap-slot').forEach(gap => {
-    if (!isRevealed) {
-      gap.textContent = `(${gap.dataset.gap}) ${gap.dataset.answer}`;
-      gap.classList.add('filled');
-    } else {
-      gap.textContent = `(${gap.dataset.gap}) ____`;
-      gap.classList.remove('filled');
-      gap.dataset.filled = '';
-    }
-  });
-
-  slide.querySelectorAll('.editable-field[data-qnum]').forEach(field => {
-    if (!isRevealed) field.textContent = field.dataset.answer;
-    else field.textContent = '__';
-  });
-
-  slide.querySelectorAll('.sentence-chip').forEach(c => c.classList.remove('used'));
-
-  btn.classList.toggle('shown');
-  btn.textContent = isRevealed ? 'Reveal Answers' : 'Hide Answers';
-}
-
-// ── Fullscreen ──
-function toggleFS() {
-  const stage = document.getElementById('stage');
-  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-    if (stage.requestFullscreen) stage.requestFullscreen();
-    else if (stage.webkitRequestFullscreen) stage.webkitRequestFullscreen();
-  } else {
-    if (document.exitFullscreen) document.exitFullscreen();
-    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-  }
-}
-
-document.addEventListener('fullscreenchange', updateFSButton);
-document.addEventListener('webkitfullscreenchange', updateFSButton);
-
-function updateFSButton() {
-  const btn = document.getElementById('fs-btn');
-  if (document.fullscreenElement || document.webkitFullscreenElement) {
-    btn.innerHTML = '⛶ Exit Fullscreen';
-  } else {
-    btn.innerHTML = '⛶ Fullscreen';
-  }
-}
-
-// ── Hotel selection ──
-function selectHotel(el) {
-  const slide = el.closest('.slide');
-  slide.querySelectorAll('.hotel-card').forEach(h => h.classList.remove('selected'));
-  el.classList.add('selected');
-  const letter = el.dataset.hotel;
-  const optionsDiv = slide.querySelector('.options[data-q="8"]');
-  if (optionsDiv) {
-    optionsDiv.querySelectorAll('.option').forEach(o => {
-      o.classList.toggle('selected', o.dataset.opt === letter);
-    });
-  }
-}
-
-// ── Touch / swipe ──
-let touchStartX = 0;
-document.getElementById('stage').addEventListener('touchstart', (e) => {
-  touchStartX = e.touches[0].clientX;
-});
-document.getElementById('stage').addEventListener('touchend', (e) => {
-  const diff = e.changedTouches[0].clientX - touchStartX;
-  if (Math.abs(diff) > 60) goSlide(diff < 0 ? 1 : -1);
-});
-
-// ── Click on slide background to advance (for smartboards) ──
-document.querySelectorAll('.slide').forEach(slide => {
-  slide.addEventListener('click', function(e) {
-    if (e.target === this) {
-      const rect = this.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      if (x > rect.width * 0.7) goSlide(1);
-      else if (x < rect.width * 0.3) goSlide(-1);
-    }
-  });
-});
-</script>
+        // Initialize First Slide
+        updateSlide();
+    </script>
 </body>
 </html>
