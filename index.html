@@ -21,8 +21,6 @@
   --amber: #d97706;
   --pink: #db2777;
   --radius: 12px;
-  --slide-w: min(96vw, 177.78vh);
-  --slide-h: min(54vw, 96vh);
 }
 
 html, body { width: 100%; height: 100%; overflow: hidden; background: #cbd5e1; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: var(--text); }
@@ -32,24 +30,25 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #cbd5e1; f
 }
 
 #stage {
-  width: var(--slide-w); height: var(--slide-h); position: relative;
-  background: var(--slide-bg); border-radius: var(--radius);
+  width: 100vw; height: 100vh; position: relative;
+  background: var(--slide-bg);
   box-shadow: 0 4px 40px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.06);
   overflow: hidden; display: flex; flex-direction: column;
 }
 
 .slide {
   position: absolute; inset: 0; display: none; flex-direction: column;
-  padding: 2.5vmin 3vmin 3vmin; overflow-y: auto; overflow-x: hidden;
+  padding: clamp(14px, 2.5vmin, 36px) clamp(18px, 3vmin, 42px) clamp(18px, 3vmin, 42px);
+  overflow-y: auto; overflow-x: hidden;
 }
 .slide.active { display: flex; }
 
 /* Navigation */
 #nav-left, #nav-right {
   position: absolute; top: 50%; transform: translateY(-50%); z-index: 100;
-  width: 3.5vmin; height: 3.5vmin; border-radius: 50%; border: none;
+  width: clamp(28px, 3.5vmin, 48px); height: clamp(28px, 3.5vmin, 48px); border-radius: 50%; border: none;
   background: rgba(0,0,0,.06); color: var(--text2); cursor: pointer;
-  font-size: 1.6vmin; display: flex; align-items: center; justify-content: center;
+  font-size: clamp(13px, 1.6vmin, 22px); display: flex; align-items: center; justify-content: center;
   transition: background .2s;
 }
 #nav-left:hover, #nav-right:hover { background: var(--accent); color: #fff; }
@@ -58,86 +57,82 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #cbd5e1; f
 
 /* Top bar */
 #topbar {
-  position: absolute; top: .8vmin; right: 1.5vmin; z-index: 100;
+  position: absolute; top: clamp(6px, .8vmin, 12px); right: clamp(12px, 1.5vmin, 22px); z-index: 100;
   display: flex; align-items: center; gap: 1vmin;
 }
-#slide-num { font-size: 1.2vmin; color: var(--text2); font-weight: 600; }
+#slide-num { font-size: clamp(11px, 1.2vmin, 18px); color: var(--text2); font-weight: 600; }
 #fs-btn {
   background: var(--card-bg); border: 1px solid rgba(0,0,0,.1);
-  color: var(--text); padding: .5vmin 1vmin; border-radius: 6px; cursor: pointer;
-  font-size: 1.1vmin; transition: background .2s; display: flex; align-items: center; gap: .4vmin;
+  color: var(--text); padding: clamp(4px, .5vmin, 8px) clamp(7px, 1vmin, 15px); border-radius: 6px; cursor: pointer;
+  font-size: clamp(10px, 1.1vmin, 16px); transition: background .2s; display: flex; align-items: center; gap: .4vmin;
 }
 #fs-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 /* Footer */
 #footer {
-  position: absolute; bottom: .8vmin; right: 1.8vmin; z-index: 100;
-  font-size: .95vmin; color: var(--text2); font-weight: 500;
+  position: absolute; bottom: clamp(6px, .8vmin, 12px); right: clamp(14px, 1.8vmin, 26px); z-index: 100;
+  font-size: clamp(10px, .95vmin, 14px); color: var(--text2); font-weight: 500;
 }
 
 /* Progress dots */
 #dots {
-  position: absolute; bottom: .8vmin; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: clamp(6px, .8vmin, 12px); left: 50%; transform: translateX(-50%);
   z-index: 100; display: flex; gap: .6vmin;
 }
 .dot {
-  width: .65vmin; height: .65vmin; border-radius: 50%;
+  width: clamp(6px, .65vmin, 10px); height: clamp(6px, .65vmin, 10px); border-radius: 50%;
   background: rgba(0,0,0,.12); cursor: pointer; transition: all .25s;
 }
 .dot.active { background: var(--accent); box-shadow: 0 0 4px rgba(2,132,199,.4); }
 
 /* Typography */
-h1 { font-size: 3.8vmin; font-weight: 800; letter-spacing: -.02em; }
-h2 { font-size: 2.4vmin; font-weight: 700; }
-h3 { font-size: 1.8vmin; font-weight: 700; }
-h4 { font-size: 1.4vmin; font-weight: 600; }
-p, li, td, span { font-size: 1.25vmin; line-height: 1.55; }
-small { font-size: 1vmin; }
+h1 { font-size: clamp(22px, 3.8vmin, 58px); font-weight: 800; letter-spacing: -.02em; }
+h2 { font-size: clamp(17px, 2.4vmin, 36px); font-weight: 700; }
+h3 { font-size: clamp(14px, 1.8vmin, 28px); font-weight: 700; }
+h4 { font-size: clamp(13px, 1.4vmin, 22px); font-weight: 600; }
+p, li, td, th, span { font-size: clamp(13px, 1.25vmin, 21px); line-height: 1.55; }
+small { font-size: clamp(11px, 1vmin, 15px); }
 
 .part-badge {
-  display: inline-block; padding: .4vmin 1.2vmin; border-radius: 20px;
-  font-weight: 700; font-size: 1vmin; letter-spacing: .05em;
+  display: inline-block; padding: clamp(4px, .4vmin, 7px) clamp(10px, 1.2vmin, 18px); border-radius: 20px;
+  font-weight: 700; font-size: clamp(10px, 1vmin, 15px); letter-spacing: .05em;
   text-transform: uppercase; margin-bottom: 1vmin;
 }
-.part-badge.p1 { background: #e0f2fe; color: #0369a1; }
-.part-badge.p2 { background: #e0e7ff; color: #4338ca; }
-.part-badge.p3 { background: #fce7f3; color: #be185d; }
-.part-badge.p4 { background: #dcfce7; color: #15803d; }
-.part-badge.p5 { background: #fef3c7; color: #b45309; }
 
 .instruction {
-  color: var(--text2); font-size: 1.05vmin; font-style: italic; margin-bottom: 1.2vmin;
+  color: var(--text2); font-size: clamp(12px, 1.05vmin, 17px); font-style: italic; margin-bottom: 1.2vmin;
 }
 
 /* Card */
 .card {
-  background: var(--card-bg); border-radius: var(--radius); padding: 1.5vmin;
-  border: 1px solid var(--card-border);
+  background: var(--card-bg); border-radius: var(--radius); padding: clamp(10px, 1.5vmin, 22px);
+  border: 1px solid var(--card-border); display: flex; flex-direction: column;
 }
 
 /* Question number badge */
 .q-num {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 2.2vmin; height: 2.2vmin; border-radius: 50%; background: var(--accent);
-  color: #fff; font-weight: 800; font-size: 1.1vmin; flex-shrink: 0;
+  width: clamp(20px, 2.2vmin, 32px); height: clamp(20px, 2.2vmin, 32px); border-radius: 50%;
+  background: var(--accent); color: #fff; font-weight: 800;
+  font-size: clamp(11px, 1.1vmin, 16px); flex-shrink: 0;
 }
 
 /* Options */
-.options { display: flex; flex-direction: column; gap: .5vmin; margin-top: .8vmin; }
+.options { display: flex; flex-direction: column; gap: .5vmin; margin-top: .8vmin; flex: 1; }
 .option {
-  display: flex; align-items: center; gap: .8vmin; padding: .7vmin 1vmin;
+  display: flex; align-items: center; gap: .8vmin; padding: clamp(6px, .7vmin, 11px) clamp(8px, 1vmin, 15px);
   border-radius: 8px; border: 2px solid rgba(0,0,0,.1); cursor: pointer;
   transition: all .2s; background: #fff;
-  font-size: 1.2vmin;
+  font-size: clamp(12px, 1.2vmin, 19px);
 }
 .option:hover { border-color: var(--accent); background: #e0f2fe; }
 .option.selected { border-color: var(--accent); background: #e0f2fe; }
 .option.correct { border-color: var(--green); background: #dcfce7; }
 .option.wrong { border-color: var(--red); background: #fee2e2; }
 .option-letter {
-  width: 2vmin; height: 2vmin; border-radius: 50%; display: flex;
+  width: clamp(18px, 2vmin, 28px); height: clamp(18px, 2vmin, 28px); border-radius: 50%; display: flex;
   align-items: center; justify-content: center; font-weight: 700;
-  font-size: 1vmin; background: rgba(0,0,0,.06); flex-shrink: 0; color: var(--text);
+  font-size: clamp(10px, 1vmin, 15px); background: rgba(0,0,0,.06); flex-shrink: 0; color: var(--text);
 }
 .option.selected .option-letter { background: var(--accent); color: #fff; }
 .option.correct .option-letter { background: var(--green); color: #fff; }
@@ -145,9 +140,9 @@ small { font-size: 1vmin; }
 
 /* Reveal button */
 .reveal-btn {
-  margin-top: .8vmin; padding: .5vmin 1.2vmin; border-radius: 6px;
+  margin-top: .8vmin; padding: clamp(5px, .5vmin, 9px) clamp(10px, 1.2vmin, 18px); border-radius: 6px;
   border: 1px solid var(--accent); background: transparent; color: var(--accent);
-  cursor: pointer; font-size: 1vmin; font-weight: 600; transition: all .2s;
+  cursor: pointer; font-size: clamp(11px, 1vmin, 15px); font-weight: 600; transition: all .2s;
 }
 .reveal-btn:hover { background: var(--accent); color: #fff; }
 .reveal-btn.shown { background: var(--green); border-color: var(--green); color: #fff; }
@@ -156,6 +151,7 @@ small { font-size: 1vmin; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vmin; }
 .grid-60-40 { display: grid; grid-template-columns: 3fr 2fr; gap: 1.5vmin; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2vmin; }
+.grid-2 > *, .grid-60-40 > *, .grid-3 > * { min-height: 0; }
 
 /* Editable */
 [contenteditable="true"] {
@@ -166,8 +162,8 @@ small { font-size: 1vmin; }
 
 .editable-field {
   background: #fefce8; border: 1px dashed rgba(0,0,0,.15);
-  border-radius: 6px; padding: .5vmin .8vmin; min-width: 10vmin;
-  display: inline-block; outline: none; font-size: 1.15vmin; color: var(--text);
+  border-radius: 6px; padding: clamp(4px, .5vmin, 8px) clamp(6px, .8vmin, 12px); min-width: 10vmin;
+  display: inline-block; outline: none; font-size: clamp(12px, 1.15vmin, 18px); color: var(--text);
 }
 .editable-field:focus { border-color: var(--accent); background: #e0f2fe; }
 
@@ -176,24 +172,25 @@ small { font-size: 1vmin; }
   display: flex; flex-direction: column; gap: .6vmin;
 }
 .msg {
-  max-width: 70%; padding: .8vmin 1.2vmin; border-radius: 12px; font-size: 1.2vmin;
+  max-width: 70%; padding: clamp(6px, .8vmin, 13px) clamp(8px, 1.2vmin, 18px); border-radius: 12px;
+  font-size: clamp(12px, 1.2vmin, 19px);
 }
 .msg.left { align-self: flex-start; background: #e2e8f0; border-bottom-left-radius: 3px; color: var(--text); }
 .msg.right { align-self: flex-end; background: #e0f2fe; border-bottom-right-radius: 3px; color: var(--text); }
-.msg-name { font-weight: 700; font-size: .85vmin; margin-bottom: .2vmin; color: var(--accent); }
+.msg-name { font-weight: 700; font-size: clamp(9px, .85vmin, 13px); margin-bottom: .2vmin; color: var(--accent); }
 
 /* Tables */
-table { width: 100%; border-collapse: collapse; font-size: 1.1vmin; }
-th, td { padding: .7vmin 1vmin; text-align: left; border-bottom: 1px solid rgba(0,0,0,.08); }
-th { background: #e0f2fe; font-weight: 700; font-size: 1.05vmin; color: #0369a1; }
-td { font-size: 1.1vmin; }
+table { width: 100%; border-collapse: collapse; font-size: clamp(11px, 1.1vmin, 17px); }
+th, td { padding: clamp(5px, .7vmin, 11px) clamp(7px, 1vmin, 15px); text-align: left; border-bottom: 1px solid rgba(0,0,0,.08); }
+th { background: #e0f2fe; font-weight: 700; font-size: clamp(10px, 1.05vmin, 16px); color: #0369a1; }
+td { font-size: clamp(11px, 1.1vmin, 17px); }
 td .editable-field { min-width: 12vmin; display: block; }
 
 /* Gap fill */
 .gap-slot {
   display: inline-block; min-width: 4vmin; padding: .15vmin .5vmin;
   border-bottom: 2px solid var(--amber); margin: 0 .2vmin; text-align: center;
-  font-weight: 600; color: var(--amber); font-size: 1.15vmin; cursor: pointer;
+  font-weight: 600; color: var(--amber); font-size: clamp(12px, 1.15vmin, 18px); cursor: pointer;
   transition: all .2s;
 }
 .gap-slot.filled { border-bottom-color: var(--green); color: var(--green); }
@@ -203,9 +200,9 @@ td .editable-field { min-width: 12vmin; display: block; }
   display: flex; flex-wrap: wrap; gap: .6vmin; margin-top: 1.2vmin;
 }
 .sentence-chip {
-  padding: .5vmin 1vmin; border-radius: 6px; background: #fff;
+  padding: clamp(4px, .5vmin, 8px) clamp(7px, 1vmin, 15px); border-radius: 6px; background: #fff;
   border: 1px solid rgba(0,0,0,.12); cursor: pointer;
-  font-size: 1vmin; transition: all .2s; color: var(--text);
+  font-size: clamp(10px, 1vmin, 15px); transition: all .2s; color: var(--text);
 }
 .sentence-chip:hover { border-color: var(--amber); background: #fffbeb; }
 .sentence-chip.selected { border-color: var(--amber); background: #fef3c7; color: var(--amber); }
@@ -214,7 +211,7 @@ td .editable-field { min-width: 12vmin; display: block; }
 /* Tag */
 .tag {
   display: inline-flex; align-items: center; gap: .3vmin; padding: .25vmin .7vmin;
-  border-radius: 4px; font-size: .9vmin; font-weight: 600;
+  border-radius: 4px; font-size: clamp(10px, .9vmin, 14px); font-weight: 600;
 }
 .tag.t { background: #dcfce7; color: #15803d; }
 .tag.f { background: #fee2e2; color: #b91c1c; }
@@ -222,41 +219,38 @@ td .editable-field { min-width: 12vmin; display: block; }
 /* Graph bars */
 .bar-chart { display: flex; flex-direction: column; gap: .4vmin; margin: .5vmin 0; }
 .bar-row { display: flex; align-items: center; gap: .8vmin; }
-.bar-label { width: 14vmin; font-size: 1vmin; text-align: right; color: var(--text2); flex-shrink: 0; }
-.bar-track { flex: 1; height: 1.6vmin; background: #e2e8f0; border-radius: 4px; position: relative; overflow: hidden; }
+.bar-label { width: 14vmin; font-size: clamp(10px, 1vmin, 15px); text-align: right; color: var(--text2); flex-shrink: 0; }
+.bar-track { flex: 1; height: clamp(14px, 1.6vmin, 24px); background: #e2e8f0; border-radius: 4px; position: relative; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 4px; transition: width .5s; display: flex; align-items: center; padding-left: .5vmin; }
 .bar-fill.girls { background: linear-gradient(90deg, #db2777, #f472b6); }
 .bar-fill.boys { background: linear-gradient(90deg, #0284c7, #38bdf8); }
-.bar-val { font-size: .85vmin; font-weight: 700; color: #fff; }
+.bar-val { font-size: clamp(9px, .85vmin, 13px); font-weight: 700; color: #fff; }
 
 /* Hotel cards */
 .hotel-card {
-  background: #fff; border-radius: var(--radius); padding: 1.2vmin;
-  border: 2px solid rgba(0,0,0,.08); cursor: pointer; transition: all .2s;
-  text-align: center;
+  background: #fff; border-radius: var(--radius);
+  padding: clamp(8px, 1.2vmin, 18px); border: 2px solid rgba(0,0,0,.08);
+  cursor: pointer; transition: all .2s; text-align: center; display: flex; flex-direction: column;
 }
 .hotel-card:hover { border-color: var(--accent); }
 .hotel-card.selected { border-color: var(--accent); background: #e0f2fe; }
-.hotel-card .hotel-name { font-weight: 700; font-size: 1.3vmin; margin-bottom: .5vmin; color: var(--text); }
-.hotel-card .hotel-price { font-size: 1vmin; color: var(--amber); font-weight: 600; margin-bottom: .5vmin; }
-.hotel-card ul { list-style: none; font-size: 1vmin; color: var(--text2); line-height: 1.6; }
+.hotel-card .hotel-name { font-weight: 700; font-size: clamp(13px, 1.3vmin, 20px); margin-bottom: .5vmin; color: var(--text); }
+.hotel-card .hotel-price { font-size: clamp(10px, 1vmin, 15px); color: var(--amber); font-weight: 600; margin-bottom: .5vmin; }
+.hotel-card ul { list-style: none; font-size: clamp(10px, 1vmin, 15px); color: var(--text2); line-height: 1.6; }
 .hotel-card li::before { content: '•'; color: var(--accent); margin-right: .4vmin; }
 
 /* Title slide */
 .title-slide { align-items: center; justify-content: center; text-align: center; }
-.title-slide h1 { font-size: 5vmin; background: linear-gradient(135deg, var(--accent), var(--accent2), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.title-slide .subtitle { font-size: 1.6vmin; color: var(--text2); margin-top: .8vmin; }
-.title-slide .meta { font-size: 1.1vmin; color: var(--text2); margin-top: 2vmin; display: flex; gap: 2vmin; }
+.title-slide h1 { font-size: clamp(28px, 5vmin, 72px); background: linear-gradient(135deg, var(--accent), var(--accent2), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.title-slide .subtitle { font-size: clamp(14px, 1.6vmin, 24px); color: var(--text2); margin-top: .8vmin; }
+.title-slide .meta { font-size: clamp(11px, 1.1vmin, 16px); color: var(--text2); margin-top: 2vmin; display: flex; gap: 2vmin; }
 
 /* Answer key slide */
 .answer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8vmin; }
-.answer-part { background: var(--card-bg); border-radius: var(--radius); padding: 1.2vmin; border: 1px solid var(--card-border); }
+.answer-part { background: var(--card-bg); border-radius: var(--radius); padding: clamp(8px, 1.2vmin, 18px); border: 1px solid var(--card-border); }
 .answer-part h4 { margin-bottom: .6vmin; }
-.answer-row { display: flex; justify-content: space-between; padding: .3vmin 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: 1vmin; }
+.answer-row { display: flex; justify-content: space-between; padding: .3vmin 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: clamp(10px, 1vmin, 15px); }
 .answer-row .ans { color: var(--green); font-weight: 700; }
-
-/* End slide */
-.end-slide { align-items: center; justify-content: center; text-align: center; }
 
 /* Scrollbar */
 .slide::-webkit-scrollbar { width: 5px; }
@@ -266,14 +260,14 @@ td .editable-field { min-width: 12vmin; display: block; }
 /* Signage */
 .sign {
   background: #f8fafc; border: 3px solid #cbd5e1; border-radius: var(--radius);
-  padding: 1.2vmin; max-width: 100%;
+  padding: clamp(8px, 1.2vmin, 18px); max-width: 100%;
 }
 .sign .do-section { margin-bottom: .8vmin; }
 .sign .dont-section {  }
-.sign .sign-head { font-weight: 800; font-size: 1.4vmin; margin-bottom: .4vmin; }
+.sign .sign-head { font-weight: 800; font-size: clamp(13px, 1.4vmin, 22px); margin-bottom: .4vmin; }
 .sign .do { color: var(--green); }
 .sign .dont { color: var(--red); }
-.sign li { list-style: none; font-size: 1.05vmin; line-height: 1.7; }
+.sign li { list-style: none; font-size: clamp(10px, 1.05vmin, 16px); line-height: 1.7; }
 
 /* Click indicator */
 .clickable { cursor: pointer; }
@@ -352,7 +346,7 @@ td .editable-field { min-width: 12vmin; display: block; }
     <div class="card">
       <h3 style="display:flex;align-items:center;gap:.6vmin;margin-bottom:.6vmin;"><span class="q-num">3</span> Sports Event Invitation</h3>
       <p contenteditable="true"><strong>Join us for the Annual Inter-School Sports Competition!</strong></p>
-      <p contenteditable="true" style="font-size:1vmin;color:var(--text2);">Date: October 25, 2024 &nbsp;|&nbsp; Time: 9:00 AM – 4:00 PM &nbsp;|&nbsp; Location: Ipoh Stadium</p>
+      <p contenteditable="true" style="font-size:clamp(10px,1vmin,15px);color:var(--text2);">Date: October 25, 2024 &nbsp;|&nbsp; Time: 9:00 AM – 4:00 PM &nbsp;|&nbsp; Location: Ipoh Stadium</p>
       <p contenteditable="true" style="margin-top:.4vmin;">Come and cheer for your favourite teams as they compete in various sports, including <strong>football, basketball, and track events</strong>.</p>
       <p style="margin-top:.6vmin;font-weight:600;" contenteditable="true">Which sport is <strong>NOT</strong> mentioned?</p>
       <div class="options" data-q="3" data-answer="B">
@@ -555,7 +549,7 @@ td .editable-field { min-width: 12vmin; display: block; }
         <tr><td>28</td><td contenteditable="true">Salon Machones is 4 metres deep, suitable for divers & snorkelers.</td><td><span class="tag" data-qnum="28" data-answer="False" onclick="toggleTF(this)" style="cursor:pointer;">Click</span></td></tr>
       </table>
       <h4 style="margin-top:1vmin;margin-bottom:.4vmin;">Short Answers (Q29–32)</h4>
-      <p style="font-size:1vmin;color:var(--text2);">No more than 5 words / a number.</p>
+      <p style="font-size:clamp(10px,1vmin,15px);color:var(--text2);">No more than 5 words / a number.</p>
       <table>
         <tr><th>#</th><th>Question</th><th>Answer</th></tr>
         <tr><td>29</td><td contenteditable="true">M.U.S.A. is the world's _____</td><td><span class="editable-field" contenteditable="true" data-qnum="29" data-answer="biggest underwater museum">________</span></td></tr>
@@ -580,7 +574,7 @@ td .editable-field { min-width: 12vmin; display: block; }
     </div>
     <div class="card">
       <h4 style="margin-bottom:.6vmin;">Sentence Bank</h4>
-      <p style="font-size:.9vmin;color:var(--text2);margin-bottom:.6vmin;">Click a gap in the passage, then click a sentence to fill it.</p>
+      <p style="font-size:clamp(10px,.9vmin,14px);color:var(--text2);margin-bottom:.6vmin;">Click a gap in the passage, then click a sentence to fill it.</p>
       <div class="sentence-bank" id="jordan-bank">
         <div class="sentence-chip" data-letter="A" onclick="fillGapSentence(this,'jordan')">A. After a year of setting his mind on conquering all seven mountains, Jordan started his adventures by climbing the dormant volcano, Mount Kilimanjaro.</div>
         <div class="sentence-chip" data-letter="B" onclick="fillGapSentence(this,'jordan')">B. He even included about the physical and emotional endurance needed for his goals.</div>
@@ -588,11 +582,11 @@ td .editable-field { min-width: 12vmin; display: block; }
         <div class="sentence-chip" data-letter="D" onclick="fillGapSentence(this,'jordan')">D. He became the youngest person to conquer most of the peaks of the Seven Summits.</div>
       </div>
       <div style="margin-top:1vmin;">
-        <p style="font-size:1vmin;font-weight:600;margin-bottom:.3vmin;">Your answers:</p>
-        <p style="font-size:1vmin;">33: <span class="editable-field" contenteditable="true" data-qnum="33" data-answer="C">__</span></p>
-        <p style="font-size:1vmin;">34: <span class="editable-field" contenteditable="true" data-qnum="34" data-answer="A">__</span></p>
-        <p style="font-size:1vmin;">35: <span class="editable-field" contenteditable="true" data-qnum="35" data-answer="D">__</span></p>
-        <p style="font-size:1vmin;">36: <span class="editable-field" contenteditable="true" data-qnum="36" data-answer="B">__</span></p>
+        <p style="font-size:clamp(10px,1vmin,15px);font-weight:600;margin-bottom:.3vmin;">Your answers:</p>
+        <p style="font-size:clamp(10px,1vmin,15px);">33: <span class="editable-field" contenteditable="true" data-qnum="33" data-answer="C">__</span></p>
+        <p style="font-size:clamp(10px,1vmin,15px);">34: <span class="editable-field" contenteditable="true" data-qnum="34" data-answer="A">__</span></p>
+        <p style="font-size:clamp(10px,1vmin,15px);">35: <span class="editable-field" contenteditable="true" data-qnum="35" data-answer="D">__</span></p>
+        <p style="font-size:clamp(10px,1vmin,15px);">36: <span class="editable-field" contenteditable="true" data-qnum="36" data-answer="B">__</span></p>
       </div>
       <button class="reveal-btn" style="margin-top:1vmin;" onclick="revealPart5a(this)">Reveal Answers</button>
     </div>
@@ -612,7 +606,7 @@ td .editable-field { min-width: 12vmin; display: block; }
     </div>
     <div class="card">
       <h4 style="margin-bottom:.6vmin;">Sentence Bank</h4>
-      <p style="font-size:.9vmin;color:var(--text2);margin-bottom:.6vmin;">Click a gap in the passage, then click a sentence to fill it.</p>
+      <p style="font-size:clamp(10px,.9vmin,14px);color:var(--text2);margin-bottom:.6vmin;">Click a gap in the passage, then click a sentence to fill it.</p>
       <div class="sentence-bank" id="talent-bank">
         <div class="sentence-chip" data-letter="A" onclick="fillGapSentence(this,'talent')">A. At the end of the show, the school headmaster came to us and told us it was such an amazing performance.</div>
         <div class="sentence-chip" data-letter="B" onclick="fillGapSentence(this,'talent')">B. Our teacher, Madam Maslina advised us and not to give up.</div>
@@ -620,11 +614,11 @@ td .editable-field { min-width: 12vmin; display: block; }
         <div class="sentence-chip" data-letter="D" onclick="fillGapSentence(this,'talent')">D. First our English teacher introduced us to the idea and everyone accepted it.</div>
       </div>
       <div style="margin-top:1vmin;">
-        <p style="font-size:1vmin;font-weight:600;margin-bottom:.3vmin;">Your answers:</p>
-        <p style="font-size:1vmin;">37: <span class="editable-field" contenteditable="true" data-qnum="37" data-answer="D">__</span></p>
-        <p style="font-size:1vmin;">38: <span class="editable-field" contenteditable="true" data-qnum="38" data-answer="B">__</span></p>
-        <p style="font-size:1vmin;">39: <span class="editable-field" contenteditable="true" data-qnum="39" data-answer="C">__</span></p>
-        <p style="font-size:1vmin;">40: <span class="editable-field" contenteditable="true" data-qnum="40" data-answer="A">__</span></p>
+        <p style="font-size:clamp(10px,1vmin,15px);font-weight:600;margin-bottom:.3vmin;">Your answers:</p>
+        <p style="font-size:clamp(10px,1vmin,15px);">37: <span class="editable-field" contenteditable="true" data-qnum="37" data-answer="D">__</span></p>
+        <p style="font-size:clamp(10px,1vmin,15px);">38: <span class="editable-field" contenteditable="true" data-qnum="38" data-answer="B">__</span></p>
+        <p style="font-size:clamp(10px,1vmin,15px);">39: <span class="editable-field" contenteditable="true" data-qnum="39" data-answer="C">__</span></p>
+        <p style="font-size:clamp(10px,1vmin,15px);">40: <span class="editable-field" contenteditable="true" data-qnum="40" data-answer="A">__</span></p>
       </div>
       <button class="reveal-btn" style="margin-top:1vmin;" onclick="revealPart5b(this)">Reveal Answers</button>
     </div>
@@ -684,14 +678,14 @@ td .editable-field { min-width: 12vmin; display: block; }
       <h4 style="color:var(--amber);">Part 5 — Gap Fill</h4>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6vmin;">
         <div>
-          <p style="font-weight:600;font-size:1vmin;margin-bottom:.3vmin;">Jordan Romero</p>
+          <p style="font-weight:600;font-size:clamp(10px,1vmin,15px);margin-bottom:.3vmin;">Jordan Romero</p>
           <div class="answer-row"><span>33.</span><span class="ans" contenteditable="true">C</span></div>
           <div class="answer-row"><span>34.</span><span class="ans" contenteditable="true">A</span></div>
           <div class="answer-row"><span>35.</span><span class="ans" contenteditable="true">D</span></div>
           <div class="answer-row"><span>36.</span><span class="ans" contenteditable="true">B</span></div>
         </div>
         <div>
-          <p style="font-weight:600;font-size:1vmin;margin-bottom:.3vmin;">Talent Search</p>
+          <p style="font-weight:600;font-size:clamp(10px,1vmin,15px);margin-bottom:.3vmin;">Talent Search</p>
           <div class="answer-row"><span>37.</span><span class="ans" contenteditable="true">D</span></div>
           <div class="answer-row"><span>38.</span><span class="ans" contenteditable="true">B</span></div>
           <div class="answer-row"><span>39.</span><span class="ans" contenteditable="true">C</span></div>
@@ -705,9 +699,9 @@ td .editable-field { min-width: 12vmin; display: block; }
 <!-- Slide 12: End Slide -->
 <div class="slide" data-index="11">
   <div class="end-slide" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    <h1 contenteditable="true" style="font-size:4vmin;">Good Luck!</h1>
+    <h1 contenteditable="true" style="font-size:clamp(24px,4vmin,60px);">Good Luck!</h1>
     <p class="subtitle" style="margin-top:1vmin;" contenteditable="true">You are ready for the exam. Review the answer key on the previous slide.</p>
-    <p class="subtitle" style="margin-top:2vmin;font-size:1.3vmin;color:var(--text2);" contenteditable="true">Form 1 English Paper 1 — Parts 1 to 5</p>
+    <p class="subtitle" style="margin-top:2vmin;font-size:clamp(12px,1.3vmin,18px);color:var(--text2);" contenteditable="true">Form 1 English Paper 1 — Parts 1 to 5</p>
     <div style="margin-top:2vmin;display:flex;gap:1vmin;">
       <span class="part-badge p1">Part 1</span>
       <span class="part-badge p2">Part 2</span>
