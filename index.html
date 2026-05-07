@@ -8,23 +8,24 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #0f172a;
-  --slide-bg: #1e293b;
-  --card-bg: #334155;
-  --text: #e2e8f0;
-  --text2: #94a3b8;
-  --accent: #38bdf8;
-  --accent2: #818cf8;
-  --green: #34d399;
-  --red: #f87171;
-  --amber: #fbbf24;
-  --pink: #f472b6;
+  --bg: #e2e8f0;
+  --slide-bg: #ffffff;
+  --card-bg: #f1f5f9;
+  --card-border: rgba(0,0,0,.06);
+  --text: #0f172a;
+  --text2: #64748b;
+  --accent: #0284c7;
+  --accent2: #4f46e5;
+  --green: #16a34a;
+  --red: #dc2626;
+  --amber: #d97706;
+  --pink: #db2777;
   --radius: 12px;
   --slide-w: min(96vw, 177.78vh);
   --slide-h: min(54vw, 96vh);
 }
 
-html, body { width: 100%; height: 100%; overflow: hidden; background: #020617; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: var(--text); }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #cbd5e1; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: var(--text); }
 
 #wrapper {
   width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
@@ -33,7 +34,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #020617; f
 #stage {
   width: var(--slide-w); height: var(--slide-h); position: relative;
   background: var(--slide-bg); border-radius: var(--radius);
-  box-shadow: 0 0 60px rgba(56,189,248,.15), 0 0 120px rgba(56,189,248,.05);
+  box-shadow: 0 4px 40px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.06);
   overflow: hidden; display: flex; flex-direction: column;
 }
 
@@ -47,11 +48,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #020617; f
 #nav-left, #nav-right {
   position: absolute; top: 50%; transform: translateY(-50%); z-index: 100;
   width: 3.5vmin; height: 3.5vmin; border-radius: 50%; border: none;
-  background: rgba(255,255,255,.1); color: #fff; cursor: pointer;
+  background: rgba(0,0,0,.06); color: var(--text2); cursor: pointer;
   font-size: 1.6vmin; display: flex; align-items: center; justify-content: center;
-  transition: background .2s; backdrop-filter: blur(4px);
+  transition: background .2s;
 }
-#nav-left:hover, #nav-right:hover { background: rgba(56,189,248,.3); }
+#nav-left:hover, #nav-right:hover { background: var(--accent); color: #fff; }
 #nav-left { left: 1vmin; }
 #nav-right { right: 1vmin; }
 
@@ -62,16 +63,16 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #020617; f
 }
 #slide-num { font-size: 1.2vmin; color: var(--text2); font-weight: 600; }
 #fs-btn {
-  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
-  color: #fff; padding: .5vmin 1vmin; border-radius: 6px; cursor: pointer;
+  background: var(--card-bg); border: 1px solid rgba(0,0,0,.1);
+  color: var(--text); padding: .5vmin 1vmin; border-radius: 6px; cursor: pointer;
   font-size: 1.1vmin; transition: background .2s; display: flex; align-items: center; gap: .4vmin;
 }
-#fs-btn:hover { background: rgba(56,189,248,.25); }
+#fs-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 /* Footer */
 #footer {
   position: absolute; bottom: .8vmin; right: 1.8vmin; z-index: 100;
-  font-size: .95vmin; color: var(--text2); font-weight: 500; opacity: .7;
+  font-size: .95vmin; color: var(--text2); font-weight: 500;
 }
 
 /* Progress dots */
@@ -81,9 +82,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #020617; f
 }
 .dot {
   width: .65vmin; height: .65vmin; border-radius: 50%;
-  background: rgba(255,255,255,.2); cursor: pointer; transition: all .25s;
+  background: rgba(0,0,0,.12); cursor: pointer; transition: all .25s;
 }
-.dot.active { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+.dot.active { background: var(--accent); box-shadow: 0 0 4px rgba(2,132,199,.4); }
 
 /* Typography */
 h1 { font-size: 3.8vmin; font-weight: 800; letter-spacing: -.02em; }
@@ -98,11 +99,11 @@ small { font-size: 1vmin; }
   font-weight: 700; font-size: 1vmin; letter-spacing: .05em;
   text-transform: uppercase; margin-bottom: 1vmin;
 }
-.part-badge.p1 { background: rgba(56,189,248,.2); color: var(--accent); }
-.part-badge.p2 { background: rgba(129,140,248,.2); color: var(--accent2); }
-.part-badge.p3 { background: rgba(244,114,182,.2); color: var(--pink); }
-.part-badge.p4 { background: rgba(52,211,153,.2); color: var(--green); }
-.part-badge.p5 { background: rgba(251,191,36,.2); color: var(--amber); }
+.part-badge.p1 { background: #e0f2fe; color: #0369a1; }
+.part-badge.p2 { background: #e0e7ff; color: #4338ca; }
+.part-badge.p3 { background: #fce7f3; color: #be185d; }
+.part-badge.p4 { background: #dcfce7; color: #15803d; }
+.part-badge.p5 { background: #fef3c7; color: #b45309; }
 
 .instruction {
   color: var(--text2); font-size: 1.05vmin; font-style: italic; margin-bottom: 1.2vmin;
@@ -111,35 +112,35 @@ small { font-size: 1vmin; }
 /* Card */
 .card {
   background: var(--card-bg); border-radius: var(--radius); padding: 1.5vmin;
-  border: 1px solid rgba(255,255,255,.06);
+  border: 1px solid var(--card-border);
 }
 
 /* Question number badge */
 .q-num {
   display: inline-flex; align-items: center; justify-content: center;
   width: 2.2vmin; height: 2.2vmin; border-radius: 50%; background: var(--accent);
-  color: #0f172a; font-weight: 800; font-size: 1.1vmin; flex-shrink: 0;
+  color: #fff; font-weight: 800; font-size: 1.1vmin; flex-shrink: 0;
 }
 
 /* Options */
 .options { display: flex; flex-direction: column; gap: .5vmin; margin-top: .8vmin; }
 .option {
   display: flex; align-items: center; gap: .8vmin; padding: .7vmin 1vmin;
-  border-radius: 8px; border: 2px solid rgba(255,255,255,.1); cursor: pointer;
-  transition: all .2s; background: rgba(255,255,255,.03);
+  border-radius: 8px; border: 2px solid rgba(0,0,0,.1); cursor: pointer;
+  transition: all .2s; background: #fff;
   font-size: 1.2vmin;
 }
-.option:hover { border-color: var(--accent); background: rgba(56,189,248,.08); }
-.option.selected { border-color: var(--accent); background: rgba(56,189,248,.18); }
-.option.correct { border-color: var(--green); background: rgba(52,211,153,.15); }
-.option.wrong { border-color: var(--red); background: rgba(248,113,113,.1); }
+.option:hover { border-color: var(--accent); background: #e0f2fe; }
+.option.selected { border-color: var(--accent); background: #e0f2fe; }
+.option.correct { border-color: var(--green); background: #dcfce7; }
+.option.wrong { border-color: var(--red); background: #fee2e2; }
 .option-letter {
   width: 2vmin; height: 2vmin; border-radius: 50%; display: flex;
   align-items: center; justify-content: center; font-weight: 700;
-  font-size: 1vmin; background: rgba(255,255,255,.1); flex-shrink: 0;
+  font-size: 1vmin; background: rgba(0,0,0,.06); flex-shrink: 0; color: var(--text);
 }
-.option.selected .option-letter { background: var(--accent); color: #0f172a; }
-.option.correct .option-letter { background: var(--green); color: #0f172a; }
+.option.selected .option-letter { background: var(--accent); color: #fff; }
+.option.correct .option-letter { background: var(--green); color: #fff; }
 .option.wrong .option-letter { background: var(--red); color: #fff; }
 
 /* Reveal button */
@@ -148,11 +149,12 @@ small { font-size: 1vmin; }
   border: 1px solid var(--accent); background: transparent; color: var(--accent);
   cursor: pointer; font-size: 1vmin; font-weight: 600; transition: all .2s;
 }
-.reveal-btn:hover { background: rgba(56,189,248,.15); }
-.reveal-btn.shown { background: var(--green); border-color: var(--green); color: #0f172a; }
+.reveal-btn:hover { background: var(--accent); color: #fff; }
+.reveal-btn.shown { background: var(--green); border-color: var(--green); color: #fff; }
 
 /* Grid */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vmin; }
+.grid-60-40 { display: grid; grid-template-columns: 3fr 2fr; gap: 1.5vmin; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2vmin; }
 
 /* Editable */
@@ -160,14 +162,14 @@ small { font-size: 1vmin; }
   outline: none; border-bottom: 2px dashed var(--accent); padding: .1vmin .3vmin;
   min-width: 4vmin; display: inline-block; transition: border-color .2s;
 }
-[contenteditable="true"]:focus { border-bottom-color: var(--accent2); }
+[contenteditable="true"]:focus { border-bottom-color: var(--accent2); background: #fefce8; }
 
 .editable-field {
-  background: rgba(255,255,255,.04); border: 1px dashed rgba(255,255,255,.15);
+  background: #fefce8; border: 1px dashed rgba(0,0,0,.15);
   border-radius: 6px; padding: .5vmin .8vmin; min-width: 10vmin;
-  display: inline-block; outline: none; font-size: 1.15vmin;
+  display: inline-block; outline: none; font-size: 1.15vmin; color: var(--text);
 }
-.editable-field:focus { border-color: var(--accent); background: rgba(56,189,248,.06); }
+.editable-field:focus { border-color: var(--accent); background: #e0f2fe; }
 
 /* Dialogue */
 .dialogue {
@@ -176,14 +178,14 @@ small { font-size: 1vmin; }
 .msg {
   max-width: 70%; padding: .8vmin 1.2vmin; border-radius: 12px; font-size: 1.2vmin;
 }
-.msg.left { align-self: flex-start; background: var(--card-bg); border-bottom-left-radius: 3px; }
-.msg.right { align-self: flex-end; background: rgba(56,189,248,.15); border-bottom-right-radius: 3px; }
+.msg.left { align-self: flex-start; background: #e2e8f0; border-bottom-left-radius: 3px; color: var(--text); }
+.msg.right { align-self: flex-end; background: #e0f2fe; border-bottom-right-radius: 3px; color: var(--text); }
 .msg-name { font-weight: 700; font-size: .85vmin; margin-bottom: .2vmin; color: var(--accent); }
 
 /* Tables */
 table { width: 100%; border-collapse: collapse; font-size: 1.1vmin; }
-th, td { padding: .7vmin 1vmin; text-align: left; border-bottom: 1px solid rgba(255,255,255,.08); }
-th { background: rgba(56,189,248,.1); font-weight: 700; font-size: 1.05vmin; color: var(--accent); }
+th, td { padding: .7vmin 1vmin; text-align: left; border-bottom: 1px solid rgba(0,0,0,.08); }
+th { background: #e0f2fe; font-weight: 700; font-size: 1.05vmin; color: #0369a1; }
 td { font-size: 1.1vmin; }
 td .editable-field { min-width: 12vmin; display: block; }
 
@@ -195,18 +197,18 @@ td .editable-field { min-width: 12vmin; display: block; }
   transition: all .2s;
 }
 .gap-slot.filled { border-bottom-color: var(--green); color: var(--green); }
-.gap-slot.active { background: rgba(251,191,36,.15); }
+.gap-slot.active { background: #fef3c7; }
 
 .sentence-bank {
   display: flex; flex-wrap: wrap; gap: .6vmin; margin-top: 1.2vmin;
 }
 .sentence-chip {
-  padding: .5vmin 1vmin; border-radius: 6px; background: var(--card-bg);
-  border: 1px solid rgba(255,255,255,.12); cursor: pointer;
-  font-size: 1vmin; transition: all .2s;
+  padding: .5vmin 1vmin; border-radius: 6px; background: #fff;
+  border: 1px solid rgba(0,0,0,.12); cursor: pointer;
+  font-size: 1vmin; transition: all .2s; color: var(--text);
 }
-.sentence-chip:hover { border-color: var(--amber); }
-.sentence-chip.selected { border-color: var(--amber); background: rgba(251,191,36,.15); color: var(--amber); }
+.sentence-chip:hover { border-color: var(--amber); background: #fffbeb; }
+.sentence-chip.selected { border-color: var(--amber); background: #fef3c7; color: var(--amber); }
 .sentence-chip.used { opacity: .3; pointer-events: none; }
 
 /* Tag */
@@ -214,28 +216,28 @@ td .editable-field { min-width: 12vmin; display: block; }
   display: inline-flex; align-items: center; gap: .3vmin; padding: .25vmin .7vmin;
   border-radius: 4px; font-size: .9vmin; font-weight: 600;
 }
-.tag.t { background: rgba(52,211,153,.15); color: var(--green); }
-.tag.f { background: rgba(248,113,113,.15); color: var(--red); }
+.tag.t { background: #dcfce7; color: #15803d; }
+.tag.f { background: #fee2e2; color: #b91c1c; }
 
 /* Graph bars */
 .bar-chart { display: flex; flex-direction: column; gap: .4vmin; margin: .5vmin 0; }
 .bar-row { display: flex; align-items: center; gap: .8vmin; }
 .bar-label { width: 14vmin; font-size: 1vmin; text-align: right; color: var(--text2); flex-shrink: 0; }
-.bar-track { flex: 1; height: 1.6vmin; background: rgba(255,255,255,.05); border-radius: 4px; position: relative; overflow: hidden; }
+.bar-track { flex: 1; height: 1.6vmin; background: #e2e8f0; border-radius: 4px; position: relative; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 4px; transition: width .5s; display: flex; align-items: center; padding-left: .5vmin; }
-.bar-fill.girls { background: linear-gradient(90deg, var(--pink), rgba(244,114,182,.6)); }
-.bar-fill.boys { background: linear-gradient(90deg, var(--accent), rgba(56,189,248,.6)); }
-.bar-val { font-size: .85vmin; font-weight: 700; }
+.bar-fill.girls { background: linear-gradient(90deg, #db2777, #f472b6); }
+.bar-fill.boys { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+.bar-val { font-size: .85vmin; font-weight: 700; color: #fff; }
 
 /* Hotel cards */
 .hotel-card {
-  background: var(--card-bg); border-radius: var(--radius); padding: 1.2vmin;
-  border: 2px solid rgba(255,255,255,.06); cursor: pointer; transition: all .2s;
+  background: #fff; border-radius: var(--radius); padding: 1.2vmin;
+  border: 2px solid rgba(0,0,0,.08); cursor: pointer; transition: all .2s;
   text-align: center;
 }
 .hotel-card:hover { border-color: var(--accent); }
-.hotel-card.selected { border-color: var(--accent); background: rgba(56,189,248,.1); }
-.hotel-card .hotel-name { font-weight: 700; font-size: 1.3vmin; margin-bottom: .5vmin; }
+.hotel-card.selected { border-color: var(--accent); background: #e0f2fe; }
+.hotel-card .hotel-name { font-weight: 700; font-size: 1.3vmin; margin-bottom: .5vmin; color: var(--text); }
 .hotel-card .hotel-price { font-size: 1vmin; color: var(--amber); font-weight: 600; margin-bottom: .5vmin; }
 .hotel-card ul { list-style: none; font-size: 1vmin; color: var(--text2); line-height: 1.6; }
 .hotel-card li::before { content: '•'; color: var(--accent); margin-right: .4vmin; }
@@ -248,9 +250,9 @@ td .editable-field { min-width: 12vmin; display: block; }
 
 /* Answer key slide */
 .answer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8vmin; }
-.answer-part { background: var(--card-bg); border-radius: var(--radius); padding: 1.2vmin; border: 1px solid rgba(255,255,255,.06); }
+.answer-part { background: var(--card-bg); border-radius: var(--radius); padding: 1.2vmin; border: 1px solid var(--card-border); }
 .answer-part h4 { margin-bottom: .6vmin; }
-.answer-row { display: flex; justify-content: space-between; padding: .3vmin 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 1vmin; }
+.answer-row { display: flex; justify-content: space-between; padding: .3vmin 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: 1vmin; }
 .answer-row .ans { color: var(--green); font-weight: 700; }
 
 /* End slide */
@@ -259,11 +261,11 @@ td .editable-field { min-width: 12vmin; display: block; }
 /* Scrollbar */
 .slide::-webkit-scrollbar { width: 5px; }
 .slide::-webkit-scrollbar-track { background: transparent; }
-.slide::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 3px; }
+.slide::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 3px; }
 
 /* Signage */
 .sign {
-  background: #1a1a2e; border: 3px solid rgba(255,255,255,.15); border-radius: var(--radius);
+  background: #f8fafc; border: 3px solid #cbd5e1; border-radius: var(--radius);
   padding: 1.2vmin; max-width: 100%;
 }
 .sign .do-section { margin-bottom: .8vmin; }
@@ -278,7 +280,7 @@ td .editable-field { min-width: 12vmin; display: block; }
 .clickable:hover { opacity: .85; }
 
 @media (max-width: 800px) {
-  .grid-2, .grid-3, .answer-grid { grid-template-columns: 1fr; }
+  .grid-2, .grid-60-40, .grid-3, .answer-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -477,7 +479,7 @@ td .editable-field { min-width: 12vmin; display: block; }
 <div class="slide" data-index="5">
   <span class="part-badge p2">Part 2</span>
   <span class="instruction" contenteditable="true">Questions 9 to 16 — Read the text and correct the underlined errors. Write the correct word.</span>
-  <div class="grid-2" style="flex:1;min-height:0;">
+  <div class="grid-60-40" style="flex:1;min-height:0;">
     <div class="card" style="overflow-y:auto;" contenteditable="true">
       <h4 style="margin-bottom:.8vmin;">BEING A TEENAGER</h4>
       <p>Being a teenager is a phase filled with so <strong>(0) many</strong> emotions, experiences, and challenges. It is a time when we are <strong>(9) <span class="editable-field" contenteditable="true">transitioned</span></strong> from childhood to adulthood, trying to find our place in the world and figuring out who we are as individuals.</p>
@@ -507,7 +509,7 @@ td .editable-field { min-width: 12vmin; display: block; }
 <div class="slide" data-index="6">
   <span class="part-badge p3">Part 3</span>
   <span class="instruction" contenteditable="true">Questions 17 to 24 — Read the text and complete the table. No more than 5 words / a number from the text.</span>
-  <div class="grid-2" style="flex:1;min-height:0;">
+  <div class="grid-60-40" style="flex:1;min-height:0;">
     <div class="card" style="overflow-y:auto;" contenteditable="true">
       <h4 style="margin-bottom:.6vmin;">Cultural Festivals</h4>
       <p>A cultural festival is an event that celebrates the <strong>cultural heritage and traditions</strong> of a particular community or region. These festivals typically include <strong>traditional music, dance and food</strong>. Some well-known cultural festivals include <strong>Oktoberfest</strong> in Germany, Carnival in Brazil, Diwali in India, and Chinese New Year in China.</p>
@@ -536,7 +538,7 @@ td .editable-field { min-width: 12vmin; display: block; }
 <div class="slide" data-index="7">
   <span class="part-badge p4">Part 4</span>
   <span class="instruction" contenteditable="true">Questions 25 to 32 — Read the text and answer. True/False (25-28) and short answers (29-32).</span>
-  <div class="grid-2" style="flex:1;min-height:0;">
+  <div class="grid-60-40" style="flex:1;min-height:0;">
     <div class="card" style="overflow-y:auto;" contenteditable="true">
       <h4 style="margin-bottom:.6vmin;">Cancun Underwater Museum of Art, Mexico</h4>
       <p>The Cancun Underwater Museum or <strong>Museo Subacuático de Arte (M.U.S.A.)</strong> in Mexico prides itself as being the <strong>biggest underwater museum</strong> in the world. MUSA is an innovative project designed to counteract the effects of climate change on our oceans and reef systems.</p>
@@ -570,7 +572,7 @@ td .editable-field { min-width: 12vmin; display: block; }
 <div class="slide" data-index="8">
   <span class="part-badge p5">Part 5</span>
   <span class="instruction" contenteditable="true">Questions 33 to 36 — Choose the correct sentence (A–D) to fill each gap.</span>
-  <div class="grid-2" style="flex:1;min-height:0;">
+  <div class="grid-60-40" style="flex:1;min-height:0;">
     <div class="card" style="overflow-y:auto;">
       <h4 style="margin-bottom:.8vmin;">Jordan Romero — Mountain Climber</h4>
       <p contenteditable="true">Jordan Romero is an American mountain climber. At the age of 9, he made it his lifelong goal to conquer all of the seven peaks. <span class="gap-slot" data-gap="33" data-answer="C" onclick="selectGap(this)">(33) ____</span> He started his mountain climbing journey by training non-stop when he was 9 years old. <span class="gap-slot" data-gap="34" data-answer="A" onclick="selectGap(this)">(34) ____</span> He then set his sight at conquering Mount Everest.</p>
@@ -601,7 +603,7 @@ td .editable-field { min-width: 12vmin; display: block; }
 <div class="slide" data-index="9">
   <span class="part-badge p5">Part 5</span>
   <span class="instruction" contenteditable="true">Questions 37 to 40 — Choose the correct sentence (A–D) to fill each gap.</span>
-  <div class="grid-2" style="flex:1;min-height:0;">
+  <div class="grid-60-40" style="flex:1;min-height:0;">
     <div class="card" style="overflow-y:auto;">
       <h4 style="margin-bottom:.8vmin;">Talent Search</h4>
       <p contenteditable="true">This year the class of Form 1 Smart decided to do a project which would be educational and fun at the same time. We came up with the idea of making a talent show. <span class="gap-slot" data-gap="37" data-answer="D" onclick="selectGap(this)">(37) ____</span> She gave us a task which was to find our talent. Some of us already had some. But others discovered their hidden talents.</p>
@@ -631,7 +633,7 @@ td .editable-field { min-width: 12vmin; display: block; }
 
 <!-- Slide 11: ANSWER KEY (Penultimate) -->
 <div class="slide" data-index="10">
-  <span class="part-badge p3" style="background:rgba(52,211,153,.2);color:var(--green);">Answer Key</span>
+  <span class="part-badge p4">Answer Key</span>
   <h2 style="margin-bottom:1vmin;">All Answers — Form 1 English Paper 1</h2>
   <div class="answer-grid">
     <div class="answer-part">
