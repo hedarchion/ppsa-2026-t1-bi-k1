@@ -39,10 +39,10 @@ body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,-apple
 
 /* ===== QUESTION CARD ===== */
 .qa-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:clamp(10px,1.1vw,18px);flex:1;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.qa-card .q-num{font-weight:700;font-size:clamp(.95rem,1.5vw,1.5rem);color:#1d4ed8;margin-bottom:clamp(5px,.6vw,10px);flex-shrink:0}
+.qa-card .q-num{font-weight:700;font-size:clamp(.9rem,1.5vw,1.5rem);color:#1d4ed8;margin-bottom:clamp(5px,.6vw,10px);flex-shrink:0}
 .qa-card .q-passage{font-size:clamp(.9rem,1.5vw,1.5rem);line-height:1.5;margin-bottom:clamp(6px,.8vw,14px);flex-shrink:0}
 .qa-card .q-passage p{margin-bottom:clamp(3px,.35vw,7px)}
-.qa-card .q-passage .data-table{width:100%;border-collapse:collapse;margin:clamp(5px,.6vw,10px)0;font-size:clamp(.85rem,1.4vw,1.4rem)}
+.qa-card .q-passage .data-table{width:100%;border-collapse:collapse;margin:clamp(5px,.6vw,10px)0;font-size:clamp(.9rem,1.5vw,1.5rem)}
 .qa-card .q-passage .data-table td{border:1px solid #e2e8f0;padding:clamp(3px,.35vw,7px)clamp(5px,.6vw,10px)}
 .qa-card .q-passage .data-table th{background:#f1f5f9;border:1px solid #e2e8f0;padding:clamp(3px,.35vw,7px)clamp(5px,.6vw,10px);font-weight:600;text-align:left}
 .qa-card .question-text{font-size:clamp(.9rem,1.5vw,1.5rem);font-weight:500;margin-bottom:clamp(6px,.7vw,12px);flex-shrink:0;color:#1e293b}
@@ -55,7 +55,7 @@ body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,-apple
 .option.correct{border-color:#16a34a;background:#dcfce7;box-shadow:0 2px 8px rgba(22,163,74,.12)}
 .option.wrong{border-color:#dc2626;background:#fee2e2;box-shadow:0 2px 8px rgba(220,38,38,.12)}
 .option.disabled{cursor:default;opacity:.85}
-.option .letter{display:inline-flex;align-items:center;justify-content:center;width:clamp(24px,2.4vw,34px);height:clamp(24px,2.4vw,34px);border-radius:50%;background:#e2e8f0;font-weight:600;font-size:clamp(.85rem,1.3vw,1.3rem);flex-shrink:0;transition:all .15s}
+.option .letter{display:inline-flex;align-items:center;justify-content:center;width:clamp(28px,2.8vw,40px);height:clamp(28px,2.8vw,40px);border-radius:50%;background:#e2e8f0;font-weight:600;font-size:clamp(.9rem,1.5vw,1.5rem);flex-shrink:0;transition:all .15s}
 .option.selected .letter{background:#2563eb;color:#fff}
 .option.correct .letter{background:#16a34a;color:#fff}
 .option.wrong .letter{background:#dc2626;color:#fff}
@@ -65,14 +65,14 @@ body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,-apple
 .signage-col{flex:1;padding:clamp(7px,.7vw,12px);border-radius:8px}
 .signage-col.do{background:#f0fdf4;border:1px solid #bbf7d0}
 .signage-col.dont{background:#fef2f2;border:1px solid #fecaca}
-.signage-col h4{font-size:clamp(.8rem,1.1vw,1.1rem);margin-bottom:clamp(4px,.4vw,7px)}
+.signage-col h4{font-size:clamp(.9rem,1.5vw,1.5rem);margin-bottom:clamp(4px,.4vw,7px)}
 .signage-col ul{list-style:none}
-.signage-col ul li{font-size:clamp(.75rem,1vw,1rem);padding:clamp(2px,.2vw,4px)0}
+.signage-col ul li{font-size:clamp(.9rem,1.5vw,1.5rem);padding:clamp(2px,.2vw,4px)0}
 .signage-col ul li::before{content:"\2713 ";color:#16a34a;font-weight:700}
 .signage-col.dont ul li::before{content:"\2717 ";color:#dc2626}
 
 /* ===== HOTEL TABLE ===== */
-.hotel-table{width:100%;border-collapse:collapse;font-size:clamp(.75rem,1vw,1rem);margin:clamp(5px,.5vw,10px)0}
+.hotel-table{width:100%;border-collapse:collapse;font-size:clamp(.9rem,1.5vw,1.5rem);margin:clamp(5px,.5vw,10px)0}
 .hotel-table th,.hotel-table td{border:1px solid #e2e8f0;padding:clamp(3px,.3vw,6px)clamp(5px,.5vw,10px);text-align:left}
 .hotel-table th{background:#f1f5f9;font-weight:600}
 
@@ -82,10 +82,10 @@ body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,-apple
 .answer-item:hover{border-color:#93c5fd;box-shadow:0 2px 8px rgba(37,99,235,.08)}
 .answer-item.revealed{border-color:#16a34a;background:#f0fdf4;box-shadow:0 2px 8px rgba(22,163,74,.1)}
 .answer-item .q-label{font-size:clamp(.9rem,1.2vw,1.2rem);color:#64748b;font-weight:500}
-.answer-item .q-answer{font-size:clamp(1.2rem,2.4vw,2.4rem);font-weight:700;color:#16a34a;min-height:1.4em;display:flex;align-items:center;justify-content:center;padding:0 clamp(6px,.5vw,10px);text-align:center;word-break:break-word;width:100%;box-sizing:border-box}
+.answer-item .q-answer{font-size:clamp(1.2rem,2.4vw,2.4rem);font-weight:700;color:#16a34a;min-height:1.4em;display:flex;align-items:center;justify-content:center;padding:0 clamp(6px,.5vw,10px);text-align:center;width:100%;box-sizing:border-box;overflow-wrap:break-word}
 .short-keys.answer-grid .q-answer{font-size:clamp(2.4rem,5vw,5rem)}
 .answer-item .q-answer.hidden{color:transparent;background:#e2e8f0;border-radius:6px;user-select:none;min-width:clamp(40px,5vw,60px)}
-.reveal-all-btn{display:block;margin:0 auto clamp(8px,.7vw,12px);padding:clamp(7px,.55vw,11px)clamp(18px,2vw,32px);background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:clamp(.75rem,.95vw,1rem);font-weight:500;cursor:pointer;transition:background .15s;font-family:inherit;box-shadow:0 2px 6px rgba(37,99,235,.2)}
+.reveal-all-btn{display:block;margin:0 auto clamp(8px,.7vw,12px);padding:clamp(7px,.55vw,11px)clamp(18px,2vw,32px);background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:clamp(.9rem,1.5vw,1.5rem);font-weight:500;cursor:pointer;transition:background .15s;font-family:inherit;box-shadow:0 2px 6px rgba(37,99,235,.2)}
 .reveal-all-btn:hover{background:#1d4ed8;box-shadow:0 3px 10px rgba(37,99,235,.3)}
 
 /* ===== READING PASSAGE ===== */
@@ -93,11 +93,11 @@ body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,-apple
 .passage-text p{margin-bottom:clamp(5px,.55vw,9px)}
 
 /* ===== ERROR WORDS ===== */
-.error-word{font-weight:700;color:#2563eb;border-bottom:2px dotted #2563eb;cursor:pointer;position:relative;transition:background .15s;padding:0 2px}
+.error-word{font-weight:700;color:#2563eb;border-bottom:2px dotted #2563eb;cursor:pointer;transition:all .15s;padding:0 2px}
 .error-word:hover{background:#dbeafe;border-radius:3px}
-.error-word .correction{display:none;position:absolute;bottom:calc(100%+6px);left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:clamp(5px,.45vw,9px)clamp(10px,.9vw,16px);border-radius:8px;font-size:clamp(.75rem,.95vw,1rem);white-space:nowrap;z-index:10;font-weight:400;box-shadow:0 4px 12px rgba(0,0,0,.2)}
-.error-word .correction::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1e293b}
-.error-word.show .correction{display:block}
+.error-word .correction{display:none;color:#16a34a;font-weight:700}
+.error-word.show{color:#94a3b8;text-decoration:line-through;border-bottom-color:transparent}
+.error-word.show .correction{display:inline;color:#16a34a;text-decoration:none;margin-left:2px}
 
 /* ===== TABLE FILL ===== */
 .table-fill{width:100%;border-collapse:collapse;font-size:clamp(.9rem,1.5vw,1.5rem)}
@@ -113,7 +113,7 @@ body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,-apple
 .tf-group{display:flex;flex-direction:column;gap:clamp(5px,.5vw,9px)}
 .tf-item{display:flex;align-items:center;gap:clamp(8px,.8vw,14px);padding:clamp(5px,.5vw,9px)clamp(10px,1vw,16px);border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc}
 .tf-item .tf-text{flex:1;font-size:clamp(.9rem,1.5vw,1.5rem)}
-.tf-btn{padding:clamp(4px,.35vw,7px)clamp(10px,1vw,16px);border:2px solid #e2e8f0;border-radius:6px;cursor:pointer;font-size:clamp(.85rem,1.1vw,1.15rem);font-weight:600;transition:all .15s;background:#fff;font-family:inherit}
+.tf-btn{padding:clamp(4px,.35vw,7px)clamp(10px,1vw,16px);border:2px solid #e2e8f0;border-radius:6px;cursor:pointer;font-size:clamp(.9rem,1.5vw,1.5rem);font-weight:600;transition:all .15s;background:#fff;font-family:inherit}
 .tf-btn:hover{border-color:#93c5fd;background:#eff6ff}
 .tf-btn.correct-true{border-color:#16a34a;background:#dcfce7;color:#16a34a}
 .tf-btn.correct-false{border-color:#16a34a;background:#dcfce7;color:#16a34a}
@@ -128,9 +128,9 @@ body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,-apple
 .gap-passage .gap-slot.filled{background:#dbeafe;border-bottom-color:#2563eb;border-radius:3px}
 .gap-passage .gap-slot:hover{background:#eff6ff}
 .cards-pool{display:grid;grid-template-columns:1fr 1fr;gap:clamp(5px,.5vw,10px);flex-shrink:0}
-.sentence-card{padding:clamp(5px,.45vw,9px)clamp(10px,.9vw,16px);border:2px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:clamp(.85rem,1.2vw,1.2rem);line-height:1.4;transition:all .15s;background:#fff;display:flex;align-items:flex-start;gap:clamp(5px,.5vw,9px);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.sentence-card{padding:clamp(5px,.45vw,9px)clamp(10px,.9vw,16px);border:2px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:clamp(.9rem,1.5vw,1.5rem);line-height:1.4;transition:all .15s;background:#fff;display:flex;align-items:flex-start;gap:clamp(5px,.5vw,9px);box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .sentence-card:hover{border-color:#93c5fd;background:#eff6ff;box-shadow:0 2px 8px rgba(37,99,235,.08)}
-.sentence-card .card-label{font-weight:700;color:#2563eb;flex-shrink:0;min-width:clamp(22px,2vw,30px);font-size:clamp(.85rem,1.2vw,1.2rem)}
+.sentence-card .card-label{font-weight:700;color:#2563eb;flex-shrink:0;min-width:clamp(26px,2.5vw,34px);font-size:clamp(.9rem,1.5vw,1.5rem)}
 .sentence-card.placed{opacity:.4;pointer-events:none;border-color:#e2e8f0;background:#f8fafc;box-shadow:none}
 
 /* ===== SHORT ANSWER ===== */
@@ -161,13 +161,13 @@ body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,-apple
 .font-btn:disabled{opacity:.3;cursor:default;background:#f8fafc;border-color:#e2e8f0;color:#cbd5e1}
 
 /* ===== INSTRUCTIONS ===== */
-.instructions{font-size:clamp(.85rem,1.2vw,1.2rem);color:#475569;margin-bottom:clamp(8px,.7vw,14px);line-height:1.5;flex-shrink:0}
+.instructions{font-size:clamp(.9rem,1.5vw,1.5rem);color:#475569;margin-bottom:clamp(8px,.7vw,14px);line-height:1.5;flex-shrink:0}
 
 /* ===== CHECK BUTTON & FEEDBACK ===== */
-.check-btn{display:inline-block;margin-top:clamp(5px,.5vw,9px);padding:clamp(5px,.45vw,9px)clamp(14px,1.4vw,24px);background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:clamp(.85rem,1.1vw,1.1rem);font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit;align-self:flex-start;box-shadow:0 2px 6px rgba(37,99,235,.2)}
+.check-btn{display:inline-block;margin-top:clamp(5px,.5vw,9px);padding:clamp(5px,.45vw,9px)clamp(14px,1.4vw,24px);background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:clamp(.9rem,1.5vw,1.5rem);font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit;align-self:flex-start;box-shadow:0 2px 6px rgba(37,99,235,.2)}
 .check-btn:hover{background:#1d4ed8;box-shadow:0 3px 10px rgba(37,99,235,.3)}
 .check-btn:disabled{background:#94a3b8;cursor:default;box-shadow:none}
-.feedback{font-size:clamp(.85rem,1.1vw,1.1rem);font-weight:600;margin-top:clamp(5px,.5vw,9px);min-height:1.4em}
+.feedback{font-size:clamp(.9rem,1.5vw,1.5rem);font-weight:600;margin-top:clamp(5px,.5vw,9px);min-height:1.4em}
 .feedback.correct{color:#16a34a}
 .feedback.wrong{color:#dc2626}
 
@@ -466,7 +466,7 @@ body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,-apple
         <span class="slide-num">Error Correction</span>
       </div>
       <div class="slide-body">
-        <div class="instructions">Read the text below and correct the underlined errors. For each question, write the correct word in the space provided on your answer sheet. <strong>Click the bolded words to see corrections.</strong></div>
+        <div class="instructions">Read the text below and correct the underlined errors. For each question, write the correct word in the space provided on your answer sheet. <strong>Click the bolded words to see the correct word appear inline.</strong></div>
         <div class="passage-text">
           <p><strong>BEING A TEENAGER</strong></p>
           <p>Being a teenager is a phase filled with so (0) many emotions, experiences, and challenges. It is a time when we are (9) <span class="error-word" data-correct="transitioning">transitioned<span class="correction">transitioning</span></span> from childhood to adulthood, trying to find our place in the world and figuring out who we are as individuals.</p>
@@ -485,7 +485,7 @@ body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,-apple
       </div>
       <div class="slide-body">
         <button class="reveal-all-btn" onclick="revealAllAnswers(this)">Reveal All Answers</button>
-        <div class="answer-grid" style="grid-template-columns:repeat(auto-fill,minmax(clamp(140px,16vw,200px),1fr))">
+        <div class="answer-grid" style="grid-template-columns:repeat(auto-fill,minmax(clamp(240px,28vw,340px),1fr))">
           <div class="answer-item"><span class="q-label">Question 9</span><span class="q-answer hidden" data-answer="transitioning">transitioning</span></div>
           <div class="answer-item"><span class="q-label">Question 10</span><span class="q-answer hidden" data-answer="played">played</span></div>
           <div class="answer-item"><span class="q-label">Question 11</span><span class="q-answer hidden" data-answer="made">made</span></div>
